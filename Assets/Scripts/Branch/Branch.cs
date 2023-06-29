@@ -2,26 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Branch : MonoBehaviour
+public class Branch
 {
-    int id;
-    Plant plant;
-    BranchPrototype prototype;
-    float maxAge;
-    float currentAge;
-    Node root;
-    Branch parentBranch;
-    List<Branch> childrenBranches;
+    public BranchPrototype prototype { get; set; }
+    public float maxAge { get; set; }
+    public float currentAge { get; set; }
+    public BranchSegment branchBase { get; set; }
+    public List<Branch> childBranches { get; set; }
 
-    // Start is called before the first frame update
-    void Start()
+    public Branch()
     {
-        
+        prototype = new BranchPrototype();
+        maxAge = maxAge;
+        currentAge = 0.0f;
+        branchBase = branchBase;
+        childBranches = new List<Branch>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void drawBranch()
     {
-        
+        Gizmos.DrawSphere(branchBase.branchSegmentBase.position, 0.125f);
+        Gizmos.DrawSphere()
     }
 }

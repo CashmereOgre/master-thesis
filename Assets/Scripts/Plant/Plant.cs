@@ -2,17 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Plant : MonoBehaviour
+public class Plant
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Branch trunk { get; private set; }
+    public Vector3 position { get; private set; }
+    public PlantSpecies plantSpecies { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    public Plant(Branch _trunk)
     {
-        
+        trunk = _trunk;
+        position = Vector3.zero;
+        plantSpecies = new PlantSpecies();
     }
 }
