@@ -22,6 +22,7 @@ public class PlantComponent : MonoBehaviour
     private void initializePlant()
     {
         Node rootNode = new Node() { isRoot = true, position = Vector3.zero, radius = 0.0f };
+        rootNode.CreateNodeSphere();
         Node terminalNode = new Node() { isRoot = false, position = new Vector3(0.0f, 1.0f, 0.0f), radius = 0.0f };
         BranchSegment trunkBase = new BranchSegment() { branchSegmentBase = rootNode, branchSegmentEnd = terminalNode };
 
