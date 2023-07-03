@@ -8,7 +8,7 @@ public class Branch
     public BranchPrototype prototype { get; set; }
     public float maxAge { get; set; }
     public float currentAge { get; set; }
-    public BranchSegment branchBase { get; set; }
+    public Node root { get; set; }
     public List<Branch> childBranches { get; set; }
 
     public Branch()
@@ -16,24 +16,23 @@ public class Branch
         prototype = new BranchPrototype();
         maxAge = maxAge;
         currentAge = 0.0f;
-        branchBase = branchBase;
         childBranches = new List<Branch>();
     }
 
     public void drawBranch()
     {
-        Gizmos.DrawSphere(branchBase.branchSegmentBase.position, 0.125f);
-        Gizmos.DrawLine(branchBase.branchSegmentBase.position, branchBase.branchSegmentEnd.position);
+        //Gizmos.DrawSphere(root.position, 0.125f);
+        //Gizmos.DrawLine(root.position, branchBase.branchSegmentEnd.position);
 
-        if(!childBranches.Any())
-        {
-            Gizmos.DrawSphere(branchBase.branchSegmentEnd.position, 0.125f);
-            return;
-        }
+        //if(!childBranches.Any())
+        //{
+        //    //Gizmos.DrawSphere(branchBase.branchSegmentEnd.position, 0.125f);
+        //    //return;
+        //}
 
-        foreach (Branch branch in childBranches)
-        {
-            branch.drawBranch();
-        }
+        //foreach (Branch branch in childBranches)
+        //{
+        //    branch.drawBranch();
+        //}
     }
 }

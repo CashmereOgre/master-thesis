@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class PlantSpecies : MonoBehaviour
 {
-    float pMax; /// Max age
-	float gp;   /// Growth Rate
-
-    float g1;   /// Tropism decrease by age
-	float g2;   /// Tropism strength overall
-
-    float beta; /// Scaling Coefficient
-	float tC;	/// Thickening Coefficent (phyrexia symbol)
+    public float pMax { get; set; } /// Max age
+	public float gp { get; set; }  /// Growth Rate
+    public float g1 { get; set; }   /// Tropism decrease by age
+	public float g2 { get; set; }   /// Tropism strength overall
+    public float beta { get; set; } /// Scaling Coefficient
 
     // Start is called before the first frame update
     void Start()
