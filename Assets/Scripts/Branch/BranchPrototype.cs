@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class BranchPrototype
 {
-    
+    public float maturityAge { get; set; }
+    public Node rootNode { get; set; }
+    public List<Node> centerNodes { get; set; }
+    public List<Node> terminalNodes { get; set; }
 }
+
+
