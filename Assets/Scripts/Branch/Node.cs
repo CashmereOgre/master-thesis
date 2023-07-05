@@ -5,14 +5,15 @@ using System;
 
 public class Node : MonoBehaviour
 {
+    public int id { get; set; }
     public bool isRoot { get; set; }
     public Vector3 position { get; set; }
     public Quaternion rotation { get; set; }
     public float age { get; set; }
     public float maxLength { get; set; }
     public PlantSpecies plantVariables { get; set; }
-    public Node parentNode { get; set; }
-    public List<Node> childNodes { get; set; }
+    public int? parentNodeId { get; set; }
+    public List<int> childNodeIds { get; set; }
 
     public GameObject nodeGameObject;
 
