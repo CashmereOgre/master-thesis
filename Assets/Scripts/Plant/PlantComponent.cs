@@ -22,19 +22,25 @@ public class PlantComponent : MonoBehaviour
 
     private void initializePlant()
     {
-        Node rootNode = new Node()
+        Node rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0);
+        rootNode.instantiateNode();
+        NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
+
+        Node terminalNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
+        terminalNode.instantiateNode();
+        NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
+
+        Branch trunk = new Branch()
         {
-            id = 0,
-            isRoot = true,
-            position = Vector3.zero,
-            rotation = Quaternion.identity,
-            age = 0.5f,
-            maxLength = 0f,
-            plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
-            parentNodeId = null,
-            childNodeIds = new List<int>()
+            prototype = BranchPrototypesInstances.basicBranchPrototype,
+            maxAge = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0).maxAge,
+            currentAge = 0.0f,
+            rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(0),
+            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1),
+            childBranches = new List<Branch>()
         };
-        NodesLookupTable.nodesDictionary.Add(0, rootNode);
+
+        plant = new Plant(trunk);
         //Node rootNode = new Node() { isRoot = true, position = Vector3.zero, radius = 0.0f };
         //rootNode.CreateNodeSphere();
         //Node terminalNode = new Node() { isRoot = false, position = new Vector3(0.0f, 1.0f, 0.0f), radius = 0.0f };

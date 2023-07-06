@@ -22,6 +22,11 @@ public class Node : MonoBehaviour
         nodeGameObject = GetComponent<GameObject>();
     }
 
+    public void instantiateNode()
+    {
+        Instantiate(nodeGameObject, position, rotation);
+    }
+
     public void growNode(float ageToAdd)
     {
         age += ageToAdd;

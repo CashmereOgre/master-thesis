@@ -42,6 +42,7 @@ public class Branch
         Node terminalNode = branchPrototypeTerminalNode;
         terminalNode.id = terminalNodeId;
         terminalNode.parentNodeId = rootNodeId;
+        terminalNode.instantiateNode();
         NodesLookupTable.nodesDictionary.Add(terminalNodeId, terminalNode);
 
         Branch childBranch = new Branch()

@@ -12,6 +12,6 @@ public class Plant
     {
         trunk = _trunk;
         position = Vector3.zero;
-        plantSpecies = new PlantSpecies();
+        plantSpecies = _trunk.rootNode.plantVariables;
     }
 }
