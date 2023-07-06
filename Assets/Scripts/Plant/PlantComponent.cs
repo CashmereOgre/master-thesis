@@ -1,3 +1,4 @@
+using Assets.Scripts.HelpfulStructures;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,19 @@ public class PlantComponent : MonoBehaviour
 
     private void initializePlant()
     {
+        Node rootNode = new Node()
+        {
+            id = 0,
+            isRoot = true,
+            position = Vector3.zero,
+            rotation = Quaternion.identity,
+            age = 0.5f,
+            maxLength = 0f,
+            plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
+            parentNodeId = null,
+            childNodeIds = new List<int>()
+        };
+        NodesLookupTable.nodesDictionary.Add(0, rootNode);
         //Node rootNode = new Node() { isRoot = true, position = Vector3.zero, radius = 0.0f };
         //rootNode.CreateNodeSphere();
         //Node terminalNode = new Node() { isRoot = false, position = new Vector3(0.0f, 1.0f, 0.0f), radius = 0.0f };

@@ -14,7 +14,7 @@ public static class NodesLookupTable
                 position = Vector3.zero,
                 rotation = Quaternion.identity,
                 age = 0f,
-                maxLength = 1f,
+                maxLength = 0f,
                 plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                 parentNodeId = null,
                 childNodeIds = new List<int>{ 1 },
@@ -24,16 +24,42 @@ public static class NodesLookupTable
             {
                 id = 1,
                 isRoot = true,
-                position = new Vector3(0f, 1f, 0f),
+                position = Vector3.zero,
                 rotation = Quaternion.identity,
                 age = 0f,
                 maxLength = 1f,
                 plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                 parentNodeId = 0,
                 childNodeIds = new List<int>{ 2, 3 },
-            }   
+            }
         },
-        { 2, new Node() },
-        { 3, new Node() },
+        { 2, new Node()
+            {
+                id = 2,
+                isRoot = false,
+                position = Vector3.zero,
+                rotation = Quaternion.Euler(0f, 90f, -30f),
+                age = 0f,
+                maxLength = 0.9f,
+                plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
+                parentNodeId = 1,
+                childNodeIds = new List<int>()
+            }
+        },
+        { 3, new Node()
+            {
+                id = 3,
+                isRoot = false,
+                position = new Vector3(-0.216f, 0.630f, 0.743f),
+                rotation = Quaternion.Euler(0f, 90f, 30f),
+                age = 0f,
+                maxLength = 0.9f,
+                plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
+                parentNodeId = 1,
+                childNodeIds = new List<int>()
+            }
+        },
     };
+
+    public static Dictionary<int, Node> nodesDictionary = new Dictionary<int, Node>();
 }

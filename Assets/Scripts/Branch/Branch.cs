@@ -37,6 +37,26 @@ public class Branch
         //}
     }
 
+    public Branch AttachBranch(int rootNodeId, int terminalNodeId, Node branchPrototypeTerminalNode)
+    {
+        Node terminalNode = branchPrototypeTerminalNode;
+        terminalNode.id = terminalNodeId;
+        terminalNode.parentNodeId = rootNodeId;
+        NodesLookupTable.nodesDictionary.Add(terminalNodeId, terminalNode);
+
+        Branch childBranch = new Branch()
+        {
+            prototype = prototype,
+            maxAge = maxAge,
+            currentAge = 0.0f,
+            rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId),
+            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(terminalNodeId),
+            childBranches = new List<Branch>()
+        };
+
+        return childBranch;
+    }
+
     public void GrowBranch(float ageStep)
     {
         if(prototype != null)
@@ -53,11 +73,23 @@ public class Branch
                 return;
             }
 
-            if (!childBranches.Any()) // if is mature and doesn't have yet child branches
+            rootNode.age = newAge;
+
+            if(childBranches.Any())
             {
-                // TODO create root node for each branch module, assign its rotation based on calculations 
+                foreach(Branch childBranch in childBranches)
+                {
+                    childBranch.GrowBranch(ageStep);
+                }
+                return;
             }
-            
+
+            foreach (Node terminalNode in prototype.terminalNodes)
+            {
+                int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+                Branch childBranch = AttachBranch(rootNode.id, lookupTableLastKey + 1, terminalNode);
+                childBranches.Add(childBranch);
+            }            
         }
     }
 }
