@@ -17,17 +17,12 @@ public class Node : MonoBehaviour
 
     public GameObject nodeGameObject;
 
-    public void Start()
+    public GameObject instantiateNode()
     {
-        nodeGameObject = GetComponent<GameObject>();
+        return Instantiate(nodeGameObject, position, rotation);
     }
 
-    public void instantiateNode()
-    {
-        Instantiate(nodeGameObject, position, rotation);
-    }
-
-    public void growNode(float ageToAdd)
+    public GameObject growNode(float ageToAdd)
     {
         age += ageToAdd;
 
@@ -51,5 +46,7 @@ public class Node : MonoBehaviour
 
             nodeGameObject.transform.position = position;
         }
+
+        return nodeGameObject;
     }
 }

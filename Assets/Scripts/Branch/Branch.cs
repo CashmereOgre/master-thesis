@@ -12,14 +12,6 @@ public class Branch
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
 
-    public Branch()
-    {
-        prototype = new BranchPrototype();
-        maxAge = maxAge;
-        currentAge = 0.0f;
-        childBranches = new List<Branch>();
-    }
-
     public void drawBranch()
     {
         //Gizmos.DrawSphere(root.position, 0.125f);
@@ -37,44 +29,24 @@ public class Branch
         //}
     }
 
-    public Branch AttachBranch(int rootNodeId, int terminalNodeId, Node branchPrototypeTerminalNode)
-    {
-        Node terminalNode = branchPrototypeTerminalNode;
-        terminalNode.id = terminalNodeId;
-        terminalNode.parentNodeId = rootNodeId;
-        terminalNode.instantiateNode();
-        NodesLookupTable.nodesDictionary.Add(terminalNodeId, terminalNode);
-
-        Branch childBranch = new Branch()
-        {
-            prototype = prototype,
-            maxAge = maxAge,
-            currentAge = 0.0f,
-            rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId),
-            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(terminalNodeId),
-            childBranches = new List<Branch>()
-        };
-
-        return childBranch;
-    }
-
     public void GrowBranch(float ageStep)
     {
+         Debug.Log("Growing");
         if(prototype != null)
         {
-            float newAge = rootNode.age + ageStep;
+            float newAge = terminalNode.age + ageStep;
 
             // TODO to improve when adding branches shredding and blooming
-            bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
-            bool decay = rootNode.age >= prototype.maturityAge;
+            //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
+            //bool decay = rootNode.age >= prototype.maturityAge;
+
+            // branch current age is not changed
 
             if (newAge < prototype.maturityAge)
             {
-                terminalNode.growNode(ageStep);
+                terminalNode.nodeGameObject = terminalNode.growNode(ageStep);
                 return;
             }
-
-            rootNode.age = newAge;
 
             if(childBranches.Any())
             {
@@ -85,12 +57,33 @@ public class Branch
                 return;
             }
 
-            foreach (Node terminalNode in prototype.terminalNodes)
+            foreach (Node prototypeTerminalNode in prototype.terminalNodes)
             {
                 int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
-                Branch childBranch = AttachBranch(rootNode.id, lookupTableLastKey + 1, terminalNode);
+                Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
                 childBranches.Add(childBranch);
             }            
         }
+    }
+
+    private Branch AttachBranch(int rootNodeId, int terminalNodeId, Node branchPrototypeTerminalNode)
+    {
+        Node terminalNode = branchPrototypeTerminalNode;
+        terminalNode.id = terminalNodeId;
+        terminalNode.parentNodeId = rootNodeId;
+        terminalNode.nodeGameObject = terminalNode.instantiateNode();
+        NodesLookupTable.nodesDictionary.Add(terminalNodeId, terminalNode);
+
+        Branch childBranch = new Branch()
+        {
+            prototype = BranchPrototypesInstances.basicBranchPrototype,
+            maxAge = maxAge, //set other maxAge, now is max age of whole tree
+            currentAge = 0.0f,
+            rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId), 
+            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(terminalNodeId),
+            childBranches = new List<Branch>()
+        };
+
+        return childBranch;
     }
 }

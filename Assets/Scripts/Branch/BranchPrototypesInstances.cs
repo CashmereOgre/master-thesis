@@ -4,15 +4,22 @@ using UnityEngine;
 
 public static class BranchPrototypesInstances
 {
-    public static BranchPrototype basicBranchPrototype = new BranchPrototype()
+    public static BranchPrototype basicBranchPrototype = new BranchPrototype();
+
+    public static void Setup(GameObject nodePrefab)
     {
-        maturityAge = 0.5f,
-        rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0),
-        centerNodes = new List<Node>() { NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1) },
-        terminalNodes = new List<Node>() 
-        { 
-            NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(2),
-            NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(3)
-        }
-    };
+        NodesLookupTable.Setup(nodePrefab);
+
+        basicBranchPrototype = new BranchPrototype()
+        {
+            maturityAge = 0.5f,
+            rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0),
+            centerNodes = new List<Node>() { NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1) },
+            terminalNodes = new List<Node>()
+            {
+                NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(2),
+                NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(3)
+            }
+        };
+    }
 }
