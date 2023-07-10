@@ -17,15 +17,32 @@ public class Node : MonoBehaviour
 
     public GameObject nodeGameObject;
 
-    public GameObject instantiateNode()
+    public Node() {}
+
+    public Node(Node branchPrototypeTerminalNode)
     {
-        return Instantiate(nodeGameObject, position, rotation);
+        id = branchPrototypeTerminalNode.id;
+        isRoot = branchPrototypeTerminalNode.isRoot;
+        position = branchPrototypeTerminalNode.position;
+        rotation = branchPrototypeTerminalNode.rotation;
+        age = branchPrototypeTerminalNode.age;
+        maxLength = branchPrototypeTerminalNode.maxLength;
+        plantVariables = branchPrototypeTerminalNode.plantVariables;
+        parentNodeId = null;
+        childNodeIds = new List<int>();
+        nodeGameObject = branchPrototypeTerminalNode.nodeGameObject;
     }
 
-    public GameObject growNode(float ageToAdd)
+    public GameObject instantiateNode(Transform parentObjectTransform)
     {
-        age += ageToAdd;
+        if(parentObjectTransform == null)
+            return Instantiate(nodeGameObject, position, rotation);
 
+        return Instantiate(nodeGameObject, position, rotation, parentObjectTransform);
+    }
+
+    public GameObject growNode()
+    {
         float branchLength = Math.Min(maxLength, age * plantVariables.scalingCoefficientBeta);
 
         if (branchLength != maxLength)
@@ -44,7 +61,7 @@ public class Node : MonoBehaviour
 
             position += tropismOffset * branchLength;
 
-            nodeGameObject.transform.position = position;
+            nodeGameObject.transform.localPosition = position;
         }
 
         return nodeGameObject;

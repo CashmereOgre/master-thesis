@@ -14,24 +14,16 @@ public class PlantComponent : MonoBehaviour
         initializePlant();
     }
 
-    private void OnDrawGizmos()
-    {
-        if(plant != null)
-        {
-            plant.trunk.drawBranch();
-        }
-    }
-
     private void initializePlant()
     {
         BranchPrototypesInstances.Setup(nodePrefab);
 
         Node rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0);
-        rootNode.nodeGameObject = rootNode.instantiateNode();
+        rootNode.nodeGameObject = rootNode.instantiateNode(null);
         NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
 
         Node terminalNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
-        terminalNode.nodeGameObject = terminalNode.instantiateNode();
+        terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
         Branch trunk = new Branch()
@@ -49,9 +41,9 @@ public class PlantComponent : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("space"))
-        {
+        //if (Input.GetKeyDown("space"))
+        //{
             plant.trunk.GrowBranch(0.1f);
-        }
+        //}
     }
 }
