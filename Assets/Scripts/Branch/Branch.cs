@@ -11,9 +11,13 @@ public class Branch
     public Node rootNode { get; set; }
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
+    private bool stop = false;
 
     public void GrowBranch(float ageStep)
     {
+        if (stop)
+            return;
+
         if(prototype != null)
         {
             terminalNode.age += ageStep;
@@ -40,9 +44,17 @@ public class Branch
             foreach (Node prototypeTerminalNode in prototype.terminalNodes)
             {
                 int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+
+                //if (lookupTableLastKey > 3)
+                //{
+                //    stop = true;
+                //    return;
+                //}
+                    
+
                 Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode); 
                 childBranches.Add(childBranch);
-            }            
+            }  
         }
     }
 
@@ -54,6 +66,9 @@ public class Branch
         newNode.id = newNodeId;
         newNode.parentNodeId = rootNodeId;  
         newNode.nodeGameObject = newNode.instantiateNode(newBranchRootNode.nodeGameObject.transform);
+        newNode.nodeGameObject.transform.rotation = newNode.rotation;
+        newNode.nodeGameObject.name = newNode.id.ToString();
+        newNode.branchLineRenderer = newNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
         Branch childBranch = new Branch()

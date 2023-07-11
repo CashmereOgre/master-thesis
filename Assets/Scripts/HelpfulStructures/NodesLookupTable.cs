@@ -26,7 +26,7 @@ public static class NodesLookupTable
                     age = 0f,
                     maxLength = 0f,
                     plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
-                    parentNodeId = null,
+                    parentNodeId = 0,
                     childNodeIds = new List<int>{ 1 },
                     nodeGameObject = nodePrefab
                 }

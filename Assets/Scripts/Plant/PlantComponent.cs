@@ -18,12 +18,13 @@ public class PlantComponent : MonoBehaviour
     {
         BranchPrototypesInstances.Setup(nodePrefab);
 
-        Node rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0);
+        Node rootNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0));
         rootNode.nodeGameObject = rootNode.instantiateNode(null);
         NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
 
-        Node terminalNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
+        Node terminalNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1));
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
+        terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
         Branch trunk = new Branch()

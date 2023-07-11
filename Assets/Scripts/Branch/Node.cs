@@ -12,10 +12,13 @@ public class Node : MonoBehaviour
     public float age { get; set; }
     public float maxLength { get; set; }
     public PlantSpecies plantVariables { get; set; }
-    public int? parentNodeId { get; set; }
+    public int parentNodeId { get; set; }
     public List<int> childNodeIds { get; set; }
 
     public GameObject nodeGameObject;
+
+    public LineRenderer branchLineRenderer;
+    private Node parentNode; 
 
     public Node() {}
 
@@ -28,7 +31,7 @@ public class Node : MonoBehaviour
         age = branchPrototypeTerminalNode.age;
         maxLength = branchPrototypeTerminalNode.maxLength;
         plantVariables = branchPrototypeTerminalNode.plantVariables;
-        parentNodeId = null;
+        parentNodeId = 0;
         childNodeIds = new List<int>();
         nodeGameObject = branchPrototypeTerminalNode.nodeGameObject;
     }
@@ -36,9 +39,9 @@ public class Node : MonoBehaviour
     public GameObject instantiateNode(Transform parentObjectTransform)
     {
         if(parentObjectTransform == null)
-            return Instantiate(nodeGameObject, position, rotation);
+            return Instantiate(nodeGameObject);
 
-        return Instantiate(nodeGameObject, position, rotation, parentObjectTransform);
+        return Instantiate(nodeGameObject, parentObjectTransform);
     }
 
     public GameObject growNode()
@@ -47,6 +50,7 @@ public class Node : MonoBehaviour
 
         if (branchLength != maxLength)
         {
+            // Debug.Log($"id: {id}, position: {position}, age: {age}, parent node id: {parentNodeId}, child node ids: {childNodeIds}");
             // rotation is applied according to prototype and other calculations when node is created
             Vector3 branchVector = new Vector3(0.0f, branchLength, 0.0f);
             branchVector = rotation * branchVector;
@@ -62,8 +66,20 @@ public class Node : MonoBehaviour
             position += tropismOffset * branchLength;
 
             nodeGameObject.transform.localPosition = position;
+
+            branchLineRenderer.SetPositions(new Vector3[2] { nodeGameObject.transform.position, parentNode.nodeGameObject.transform.position });
         }
 
         return nodeGameObject;
+    }
+
+    public LineRenderer setBranchLineRenderer()
+    {
+        var lineRenderer = nodeGameObject.GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
+
+        parentNode = new Node(NodesLookupTable.nodesDictionary[parentNodeId]); 
+
+        return lineRenderer;
     }
 }
