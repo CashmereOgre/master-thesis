@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeGameObject: {fileID: 6551240598046226684}
+  branchLineRenderer: {fileID: 0}
 --- !u!120 &7409937087785753920
 LineRenderer:
   m_ObjectHideFlags: 0

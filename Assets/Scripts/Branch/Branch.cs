@@ -26,35 +26,34 @@ public class Branch
             //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
             //bool decay = rootNode.age >= prototype.maturityAge;
 
-            if (terminalNode.age < prototype.maturityAge)
-            {
-                terminalNode.nodeGameObject = terminalNode.growNode();
-                return;
-            }
+            terminalNode.nodeGameObject = terminalNode.growNode();
 
-            if(childBranches.Any())
+            if (terminalNode.age >= prototype.maturityAge)
             {
-                foreach(Branch childBranch in childBranches)
+                if (childBranches.Any())
                 {
-                    childBranch.GrowBranch(ageStep);
+                    foreach (Branch childBranch in childBranches)
+                    {
+                        childBranch.GrowBranch(ageStep);
+                    }
+                    return;
                 }
-                return;
+
+                foreach (Node prototypeTerminalNode in prototype.terminalNodes)
+                {
+                    int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+
+                    //if (lookupTableLastKey > 3)
+                    //{
+                    //    stop = true;
+                    //    return;
+                    //}
+
+
+                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
+                    childBranches.Add(childBranch);
+                }
             }
-
-            foreach (Node prototypeTerminalNode in prototype.terminalNodes)
-            {
-                int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
-
-                //if (lookupTableLastKey > 3)
-                //{
-                //    stop = true;
-                //    return;
-                //}
-                    
-
-                Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode); 
-                childBranches.Add(childBranch);
-            }  
         }
     }
 
@@ -66,7 +65,7 @@ public class Branch
         newNode.id = newNodeId;
         newNode.parentNodeId = rootNodeId;  
         newNode.nodeGameObject = newNode.instantiateNode(newBranchRootNode.nodeGameObject.transform);
-        newNode.nodeGameObject.transform.rotation = newNode.rotation;
+        newNode.nodeGameObject.transform.localRotation = newNode.rotation;
         newNode.nodeGameObject.name = newNode.id.ToString();
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
