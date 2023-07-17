@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Branch
+public class Branch: MonoBehaviour
 {
     public BranchPrototype prototype { get; set; }
     public float maxAge { get; set; }
@@ -11,6 +11,8 @@ public class Branch
     public Node rootNode { get; set; }
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
+
+    private List<int> childBranchesTerminalNodesIds = new List<int>();
     private bool stop = false;
 
     public void GrowBranch(float ageStep)
@@ -27,6 +29,13 @@ public class Branch
             //bool decay = rootNode.age >= prototype.maturityAge;
 
             terminalNode.nodeGameObject = terminalNode.growNode();
+
+            Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
+            Vector3 localizedBranchCenterOfGeometry = terminalNode.nodeGameObject.transform.InverseTransformPoint(branchCenterOfGeometry);
+            float boundingSphereRadius = Vector3.Distance(rootNode.nodeGameObject.transform.position, branchCenterOfGeometry);
+            terminalNode.boundingSphere = terminalNode.updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
+
+            //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
             if (terminalNode.age >= prototype.maturityAge)
             {
@@ -61,6 +70,8 @@ public class Branch
     {
         Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId);
 
+        childBranchesTerminalNodesIds.Add(newNodeId);
+
         Node newNode = new Node(branchPrototypeTerminalNode);
         newNode.id = newNodeId;
         newNode.parentNodeId = rootNodeId;  
@@ -68,6 +79,7 @@ public class Branch
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
         newNode.nodeGameObject.name = newNode.id.ToString();
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
+        newNode.boundingSphere = newNode.setBoundingSphere();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
         Branch childBranch = new Branch()
@@ -81,5 +93,46 @@ public class Branch
         };
 
         return childBranch;
+    }
+
+    private Vector3 getBranchCenterOfGeometry()
+    {
+        Vector3 center = Vector3.zero;
+        List<Vector3> childBranchesPosition = new List<Vector3>();
+        
+        if(childBranches.Any()) 
+        { 
+            foreach (Branch child in childBranches)
+            {
+                childBranchesPosition.AddRange(child.getAllInDepthChildBranchesPositions());
+            }
+
+            foreach (Vector3 position in childBranchesPosition)
+            {
+                center = center + position;
+            }
+        }
+
+        center = center + terminalNode.nodeGameObject.transform.position;
+
+        center = center / (childBranchesPosition.Count + 1);
+
+        return center;
+    }
+
+    private List<Vector3> getAllInDepthChildBranchesPositions()
+    {
+        List<Vector3> result = new List<Vector3>();
+        if (childBranches.Any())
+        {
+            foreach (Branch child in childBranches)
+            {
+                result.AddRange(child.getAllInDepthChildBranchesPositions());
+            }
+        }
+
+        result.Add(rootNode.nodeGameObject.transform.position);
+
+        return result;
     }
 }

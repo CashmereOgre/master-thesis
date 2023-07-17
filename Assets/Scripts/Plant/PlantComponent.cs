@@ -25,6 +25,7 @@ public class PlantComponent : MonoBehaviour
         Node terminalNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1));
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
+        terminalNode.boundingSphere = terminalNode.setBoundingSphere();
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
         Branch trunk = new Branch()
