@@ -17,8 +17,6 @@ public class Node : MonoBehaviour
 
     public GameObject nodeGameObject;
 
-    public SphereCollider boundingSphere;
-
     public LineRenderer branchLineRenderer;
     private Node parentNode; 
 
@@ -75,14 +73,6 @@ public class Node : MonoBehaviour
         return nodeGameObject;
     }
 
-    public SphereCollider updateBoundingSpherePositionAndRadius(Vector3 position, float radius)
-    {
-        boundingSphere.center = position;
-        boundingSphere.radius = radius;
-
-        return boundingSphere;
-    }
-
     public LineRenderer setBranchLineRenderer()
     {
         var lineRenderer = nodeGameObject.GetComponent<LineRenderer>();
@@ -91,12 +81,5 @@ public class Node : MonoBehaviour
         parentNode = new Node(NodesLookupTable.nodesDictionary[parentNodeId]); 
 
         return lineRenderer;
-    }
-
-    public SphereCollider setBoundingSphere()
-    {
-        var collider = nodeGameObject.GetComponent<SphereCollider>();
-        
-        return collider;
     }
 }

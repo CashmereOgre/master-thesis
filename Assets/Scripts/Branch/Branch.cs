@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Branch: MonoBehaviour
@@ -12,7 +13,10 @@ public class Branch: MonoBehaviour
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
 
-    private List<int> childBranchesTerminalNodesIds = new List<int>();
+    private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
+
+    public SphereCollider boundingSphere;
+
     private bool stop = false;
 
     public void GrowBranch(float ageStep)
@@ -33,7 +37,7 @@ public class Branch: MonoBehaviour
             Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
             Vector3 localizedBranchCenterOfGeometry = terminalNode.nodeGameObject.transform.InverseTransformPoint(branchCenterOfGeometry);
             float boundingSphereRadius = Vector3.Distance(rootNode.nodeGameObject.transform.position, branchCenterOfGeometry);
-            terminalNode.boundingSphere = terminalNode.updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
+            boundingSphere = updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
@@ -70,8 +74,6 @@ public class Branch: MonoBehaviour
     {
         Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId);
 
-        childBranchesTerminalNodesIds.Add(newNodeId);
-
         Node newNode = new Node(branchPrototypeTerminalNode);
         newNode.id = newNodeId;
         newNode.parentNodeId = rootNodeId;  
@@ -79,7 +81,6 @@ public class Branch: MonoBehaviour
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
         newNode.nodeGameObject.name = newNode.id.ToString();
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
-        newNode.boundingSphere = newNode.setBoundingSphere();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
         Branch childBranch = new Branch()
@@ -92,37 +93,42 @@ public class Branch: MonoBehaviour
             childBranches = new List<Branch>()
         };
 
+        childBranch.boundingSphere = childBranch.setBoundingSphere();
+
         return childBranch;
     }
 
     private Vector3 getBranchCenterOfGeometry()
     {
         Vector3 center = Vector3.zero;
-        List<Vector3> childBranchesPosition = new List<Vector3>();
-        
-        if(childBranches.Any()) 
+        var childDictionary = new Dictionary<int, Vector3>();
+
+
+        if (childBranches.Any()) 
         { 
             foreach (Branch child in childBranches)
             {
-                childBranchesPosition.AddRange(child.getAllInDepthChildBranchesPositions());
+                childDictionary.AddRange(child.getAllInDepthChildBranchesPositions());
             }
 
-            foreach (Vector3 position in childBranchesPosition)
+            foreach (KeyValuePair<int, Vector3> position in childDictionary)
             {
-                center = center + position;
+                center = center + position.Value;
             }
+
+            childBranchesTerminalNodesIdsAndRootPositions = childDictionary;
         }
 
         center = center + terminalNode.nodeGameObject.transform.position;
 
-        center = center / (childBranchesPosition.Count + 1);
+        center = center / (childDictionary.Count + 1);
 
         return center;
     }
 
-    private List<Vector3> getAllInDepthChildBranchesPositions()
+    private Dictionary<int,Vector3> getAllInDepthChildBranchesPositions()
     {
-        List<Vector3> result = new List<Vector3>();
+        Dictionary<int, Vector3> result = new Dictionary<int, Vector3>();
         if (childBranches.Any())
         {
             foreach (Branch child in childBranches)
@@ -131,8 +137,31 @@ public class Branch: MonoBehaviour
             }
         }
 
-        result.Add(rootNode.nodeGameObject.transform.position);
+        result.Add(terminalNode.id, rootNode.nodeGameObject.transform.position);
 
         return result;
+    }
+
+    public SphereCollider setBoundingSphere()
+    {
+        var collider = terminalNode.nodeGameObject.GetComponent<SphereCollider>();
+
+        return collider;
+    }
+
+    private SphereCollider updateBoundingSpherePositionAndRadius(Vector3 position, float radius)
+    {
+        boundingSphere.center = position;
+        boundingSphere.radius = radius;
+
+        return boundingSphere;
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collision.collider.gameObject.GetComponent<Node>().id))
+            //TODO: make it better, without getComponent
+            return;
+
     }
 }

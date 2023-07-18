@@ -25,7 +25,6 @@ public class PlantComponent : MonoBehaviour
         Node terminalNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1));
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
-        terminalNode.boundingSphere = terminalNode.setBoundingSphere();
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
         Branch trunk = new Branch()
@@ -37,6 +36,8 @@ public class PlantComponent : MonoBehaviour
             terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1),
             childBranches = new List<Branch>()
         };
+
+        trunk.boundingSphere = trunk.setBoundingSphere();
 
         plant = new Plant(trunk);
     }
