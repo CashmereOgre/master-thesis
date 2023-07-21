@@ -1,3 +1,4 @@
+using Assets.Scripts.HelpfulStructures;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ public class Branch: MonoBehaviour
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
 
-    private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
-
     public SphereCollider boundingSphere;
 
     private bool stop = false;
+
+    private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
+
+    private Dictionary<int, CollisionInfo> collidersDictionary = new Dictionary<int, CollisionInfo>();
 
     public void GrowBranch(float ageStep)
     {
@@ -159,9 +162,27 @@ public class Branch: MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collision.collider.gameObject.GetComponent<Node>().id))
-            //TODO: make it better, without getComponent
+        if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
             return;
 
+        int collidingObjectId = int.Parse(collision.collider.gameObject.name);
+        int collisionPointsCount = collision.contactCount;
+
+        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId) ||
+            collidersDictionary[collidingObjectId].collisionPointsCount == collision.contactCount)
+            return;
+
+        SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
+        float r1 = boundingSphere.radius;
+        float r2 = collider.radius;
+
+        float distance = Vector3.Distance(boundingSphere.center, collider.center);
+        float heightOfIntersection = r1 + r2 - distance;
+        float radiusOfIntersection = Mathf.Pow(Mathf.Pow(r1, 2) - Mathf.Pow(heightOfIntersection - r2, 2), 0.5f);
+        float volumeOfIntersection = (1 / 6) * Mathf.PI * heightOfIntersection * (3 * Mathf.Pow(radiusOfIntersection, 2) + Mathf.Pow(heightOfIntersection, 2));
+
+        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, collisionPointsCount);
+
+        Debug.Log($"Id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
     }
 }

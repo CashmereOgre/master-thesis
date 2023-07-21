@@ -20,10 +20,12 @@ public class PlantComponent : MonoBehaviour
 
         Node rootNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0));
         rootNode.nodeGameObject = rootNode.instantiateNode(null);
+        rootNode.nodeGameObject.name = "Root";
         NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
 
         Node terminalNode = new Node(NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1));
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
+        terminalNode.nodeGameObject.name = "Trunk";
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
