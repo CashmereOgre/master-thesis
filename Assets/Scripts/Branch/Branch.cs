@@ -7,12 +7,12 @@ using UnityEngine;
 
 public class Branch: MonoBehaviour
 {
-    public BranchPrototype prototype { get; set; }
-    public float maxAge { get; set; }
-    public float currentAge { get; set; }
-    public Node rootNode { get; set; }
-    public Node terminalNode { get; set; }
-    public List<Branch> childBranches { get; set; }
+    public BranchPrototype prototype;
+    public float maxAge;
+    public float currentAge;
+    public Node rootNode;
+    public Node terminalNode;
+    public List<Branch> childBranches;
 
     public SphereCollider boundingSphere;
 
@@ -52,7 +52,6 @@ public class Branch: MonoBehaviour
                     {
                         childBranch.GrowBranch(ageStep);
                     }
-                    return;
                 }
 
                 foreach (Node prototypeTerminalNode in prototype.terminalNodes)
@@ -162,27 +161,33 @@ public class Branch: MonoBehaviour
 
     private void OnCollisionStay(Collision collision)
     {
-        if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
-            return;
+        if(terminalNode != null)
+        {
+            if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
+                return;
 
-        int collidingObjectId = int.Parse(collision.collider.gameObject.name);
-        int collisionPointsCount = collision.contactCount;
+            int collidingObjectId = int.Parse(collision.collider.gameObject.name);
+            int collisionPointsCount = collision.contactCount;
 
-        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId) ||
-            collidersDictionary[collidingObjectId].collisionPointsCount == collision.contactCount)
-            return;
+            if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId) ||
+                (collidersDictionary.ContainsKey(collidingObjectId) &&
+                collidersDictionary[collidingObjectId].collisionPointsCount == collision.contactCount))
+                return;
 
-        SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
-        float r1 = boundingSphere.radius;
-        float r2 = collider.radius;
+            SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
+            float r1 = boundingSphere.radius;
+            float r2 = collider.radius;
+            Vector3 boundingSphereCenter = terminalNode.nodeGameObject.transform.TransformPoint(boundingSphere.center);
+            Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
 
-        float distance = Vector3.Distance(boundingSphere.center, collider.center);
-        float heightOfIntersection = r1 + r2 - distance;
-        float radiusOfIntersection = Mathf.Pow(Mathf.Pow(r1, 2) - Mathf.Pow(heightOfIntersection - r2, 2), 0.5f);
-        float volumeOfIntersection = (1 / 6) * Mathf.PI * heightOfIntersection * (3 * Mathf.Pow(radiusOfIntersection, 2) + Mathf.Pow(heightOfIntersection, 2));
+            float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
+            float heightOfIntersection = r1 + r2 - distance;
+            float radiusOfIntersection = Mathf.Pow(Mathf.Pow(r1, 2) - Mathf.Pow(heightOfIntersection - r2, 2), 0.5f);
+            float volumeOfIntersection = (1 / 6) * Mathf.PI * heightOfIntersection * (3 * Mathf.Pow(radiusOfIntersection, 2) + Mathf.Pow(heightOfIntersection, 2));
 
-        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, collisionPointsCount);
+            collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, collisionPointsCount);
 
-        Debug.Log($"Id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
+            Debug.Log($"Id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
+        }
     }
 }
