@@ -29,15 +29,13 @@ public class PlantComponent : MonoBehaviour
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(terminalNode.id, terminalNode);
 
-        Branch trunk = new Branch()
-        {
-            prototype = BranchPrototypesInstances.basicBranchPrototype,
-            maxAge = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0).maxAge,
-            currentAge = 0.0f,
-            rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(0),
-            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1),
-            childBranches = new List<Branch>()
-        };
+        var trunk = rootNode.nodeGameObject.gameObject.GetComponent<Branch>();
+        trunk.prototype = BranchPrototypesInstances.basicBranchPrototype;
+        trunk.maxAge = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0).maxAge;
+        trunk.currentAge = 0.0f;
+        trunk.rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(0);
+        trunk.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1);
+        trunk.childBranches = new List<Branch>();
 
         trunk.boundingSphere = trunk.setBoundingSphere();
 

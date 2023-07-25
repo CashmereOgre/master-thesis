@@ -85,15 +85,14 @@ public class Branch: MonoBehaviour
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
-        Branch childBranch = new Branch()
-        {
-            prototype = BranchPrototypesInstances.basicBranchPrototype,
-            maxAge = maxAge, //set other maxAge, now is max age of whole tree
-            currentAge = 0.0f,
-            rootNode = newBranchRootNode, 
-            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId), 
-            childBranches = new List<Branch>()
-        };
+
+        var childBranch = newNode.nodeGameObject.gameObject.GetComponent<Branch>();
+        childBranch.prototype = BranchPrototypesInstances.basicBranchPrototype;
+        childBranch.maxAge = maxAge;//set other maxAge, now is max age of whole tree
+        childBranch.currentAge = 0.0f;
+        childBranch.rootNode = newBranchRootNode;
+        childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1);
+        childBranch.childBranches = new List<Branch>();
 
         childBranch.boundingSphere = childBranch.setBoundingSphere();
 
