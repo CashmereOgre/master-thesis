@@ -168,21 +168,25 @@ public class Branch: MonoBehaviour
         int collidingObjectId = int.Parse(collision.collider.gameObject.name);
         int collisionPointsCount = collision.contactCount;
 
-        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId) ||
-            collidersDictionary[collidingObjectId].collisionPointsCount == collision.contactCount)
+        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
             return;
 
         SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
         float r1 = boundingSphere.radius;
         float r2 = collider.radius;
+        Vector3 boundingSphereCenter = boundingSphere.bounds.center;
+        Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
 
-        float distance = Vector3.Distance(boundingSphere.center, collider.center);
-        float heightOfIntersection = r1 + r2 - distance;
-        float radiusOfIntersection = Mathf.Pow(Mathf.Pow(r1, 2) - Mathf.Pow(heightOfIntersection - r2, 2), 0.5f);
-        float volumeOfIntersection = (1 / 6) * Mathf.PI * heightOfIntersection * (3 * Mathf.Pow(radiusOfIntersection, 2) + Mathf.Pow(heightOfIntersection, 2));
+        float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
+        float term1 = Mathf.Pow(r1 + r2 - distance, 2);
+        float term2 = distance * distance + 2 * distance * r2 - 3 * r2 * r2 + 2 * distance * r1 + 6 * r1 * r2 - 3 * r1 * r1;
+        float volumeOfIntersection = Mathf.PI * term1 * term2 / (12 * distance);
+
+        if (volumeOfIntersection < 0)
+            return;
 
         collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, collisionPointsCount);
 
-        Debug.Log($"Id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
+        Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
     }
 }
