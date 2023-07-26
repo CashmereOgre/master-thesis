@@ -78,23 +78,28 @@ public class Branch: MonoBehaviour
         Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId);
 
         Node newNode = new Node(branchPrototypeTerminalNode);
-        newNode.id = newNodeId;
-        newNode.parentNodeId = rootNodeId;  
         newNode.nodeGameObject = newNode.instantiateNode(newBranchRootNode.nodeGameObject.transform);
+        newNode = newNode.nodeGameObject.GetComponent<Node>();
+        newNode.id = newNodeId;
+        newNode.position = branchPrototypeTerminalNode.position;
+        newNode.rotation = branchPrototypeTerminalNode.rotation;
+        newNode.age = branchPrototypeTerminalNode.age;
+        newNode.maxLength = branchPrototypeTerminalNode.maxLength;
+        newNode.plantVariables = branchPrototypeTerminalNode.plantVariables;
+        newNode.parentNodeId = rootNodeId;  
+        newNode.childNodeIds = branchPrototypeTerminalNode.childNodeIds;
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
         newNode.nodeGameObject.name = newNode.id.ToString();
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
-        Branch childBranch = new Branch()
-        {
-            prototype = BranchPrototypesInstances.basicBranchPrototype,
-            maxAge = maxAge, //set other maxAge, now is max age of whole tree
-            currentAge = 0.0f,
-            rootNode = newBranchRootNode, 
-            terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId), 
-            childBranches = new List<Branch>()
-        };
+        Branch childBranch = newNode.nodeGameObject.GetComponent<Branch>();
+        childBranch.prototype = BranchPrototypesInstances.basicBranchPrototype;
+        childBranch.maxAge = maxAge; //set other maxAge, now is max age of whole tree
+        childBranch.currentAge = 0.0f;
+        childBranch.rootNode = newBranchRootNode;
+        childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId); 
+        childBranch.childBranches = new List<Branch>();
 
         childBranch.boundingSphere = childBranch.setBoundingSphere();
 
