@@ -19,8 +19,10 @@ public class Branch: MonoBehaviour
     private bool stop = false;
 
     private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
-
     private Dictionary<int, CollisionInfo> collidersDictionary = new Dictionary<int, CollisionInfo>();
+
+    private float intersectionsSum = 0;
+    private float lightExposure = 0;
 
     public void GrowBranch(float ageStep)
     {
@@ -38,6 +40,7 @@ public class Branch: MonoBehaviour
             terminalNode.nodeGameObject = terminalNode.growNode();
 
             Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
+            childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions();
             Vector3 localizedBranchCenterOfGeometry = terminalNode.nodeGameObject.transform.InverseTransformPoint(branchCenterOfGeometry);
             float boundingSphereRadius = Vector3.Distance(rootNode.nodeGameObject.transform.position, branchCenterOfGeometry);
             boundingSphere = updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
@@ -116,20 +119,22 @@ public class Branch: MonoBehaviour
         { 
             foreach (Branch child in childBranches)
             {
-                childDictionary.AddRange(child.getAllInDepthChildBranchesPositions());
+                childDictionary.Add(child.terminalNode.id, child.terminalNode.nodeGameObject.transform.position);
             }
 
+            int i = 0;
             foreach (KeyValuePair<int, Vector3> position in childDictionary)
             {
-                center = center + position.Value;
+                center = center + position.Value + terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position;
+                i++;
             }
 
-            childBranchesTerminalNodesIdsAndRootPositions = childDictionary;
+            center = center / ((childDictionary.Count + 1) * 2);
+
+            return center;
         }
 
-        center = center + terminalNode.nodeGameObject.transform.position;
-
-        center = center / (childDictionary.Count + 1);
+        center = (terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position) / 2;
 
         return center;
     }
@@ -145,7 +150,7 @@ public class Branch: MonoBehaviour
             }
         }
 
-        result.Add(terminalNode.id, rootNode.nodeGameObject.transform.position);
+        result.Add(terminalNode.id, terminalNode.nodeGameObject.transform.position);
 
         return result;
     }
@@ -155,6 +160,33 @@ public class Branch: MonoBehaviour
         var collider = terminalNode.nodeGameObject.GetComponent<SphereCollider>();
 
         return collider;
+    }
+
+    public float calculateLightExposure()
+    {
+        intersectionsSum = 0;
+        lightExposure = 0;
+
+        if(terminalNode.id != 1)
+        {
+            foreach (KeyValuePair<int, CollisionInfo> collisionInfo in collidersDictionary)
+            {
+                intersectionsSum += collisionInfo.Value.volumeOfCollision;
+            }
+
+            float currentBranchLightExposure = Mathf.Exp(-intersectionsSum);
+            lightExposure += currentBranchLightExposure;
+        }
+
+        if (childBranches.Any())
+        {
+            foreach (Branch childBranch in childBranches)
+            {
+                lightExposure += childBranch.calculateLightExposure();
+            }
+        }
+
+        return lightExposure;
     }
 
     private SphereCollider updateBoundingSpherePositionAndRadius(Vector3 position, float radius)
@@ -171,7 +203,6 @@ public class Branch: MonoBehaviour
             return;
 
         int collidingObjectId = int.Parse(collision.collider.gameObject.name);
-        int collisionPointsCount = collision.contactCount;
 
         if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
             return;
@@ -183,6 +214,10 @@ public class Branch: MonoBehaviour
         Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
 
         float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
+
+        if (distance == 0)
+            return;
+
         float term1 = Mathf.Pow(r1 + r2 - distance, 2);
         float term2 = distance * distance + 2 * distance * r2 - 3 * r2 * r2 + 2 * distance * r1 + 6 * r1 * r2 - 3 * r1 * r1;
         float volumeOfIntersection = Mathf.PI * term1 * term2 / (12 * distance);
@@ -190,8 +225,8 @@ public class Branch: MonoBehaviour
         if (volumeOfIntersection < 0)
             return;
 
-        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, collisionPointsCount);
+        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, colliderCenter, r2, distance);
 
-        Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}, count: {collisionPointsCount}");
+        //Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}");
     }
 }

@@ -69,7 +69,10 @@ public class PlantComponent : MonoBehaviour
     {
         //if (Input.GetKeyDown("space"))
         //{
-            plant.trunk.GrowBranch(0.1f);
+        plant.trunk.GrowBranch(0.1f);
+
+        plant.totalLightExposure = plant.trunk.calculateLightExposure();
+        Debug.Log(plant.totalLightExposure);
         //}
     }
 }

@@ -10,12 +10,16 @@ namespace Assets.Scripts.HelpfulStructures
     public class CollisionInfo
     {
         public float volumeOfCollision { get; set; }
-        public int collisionPointsCount { get; set; }
+        public Vector3 colliderPosition { get; set; }
+        public float colliderRadius { get; set; }
+        public float colliderDistance { get; set; }
 
-        public CollisionInfo(float volume, int count) 
+        public CollisionInfo(float volume, Vector3 position, float radius, float distance) 
         { 
-            this.volumeOfCollision = volume;
-            this.collisionPointsCount = count;
+            volumeOfCollision = volume;
+            colliderPosition = position;
+            colliderRadius = radius;
+            colliderDistance = distance;
         }
     }
 }
