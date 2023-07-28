@@ -7,6 +7,7 @@ public class Node : MonoBehaviour
 {
     public int id { get; set; }
     public bool isRoot { get; set; }
+    public bool isMain { get; set; }
     public Vector3 position { get; set; }
     public Quaternion rotation { get; set; }
     public float age { get; set; }
@@ -26,6 +27,7 @@ public class Node : MonoBehaviour
     {
         id = branchPrototypeTerminalNode.id;
         isRoot = branchPrototypeTerminalNode.isRoot;
+        isMain = branchPrototypeTerminalNode.isMain;
         position = branchPrototypeTerminalNode.position;
         rotation = branchPrototypeTerminalNode.rotation;
         age = branchPrototypeTerminalNode.age;

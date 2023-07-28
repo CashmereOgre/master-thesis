@@ -21,6 +21,7 @@ public static class NodesLookupTable
                 {
                     id = 0,
                     isRoot = true,
+                    isMain = true,
                     position = Vector3.zero,
                     rotation = Quaternion.identity,
                     age = 0f,
@@ -35,6 +36,7 @@ public static class NodesLookupTable
                 {
                     id = 1,
                     isRoot = true,
+                    isMain = true,
                     position = Vector3.zero,
                     rotation = Quaternion.identity,
                     age = 0f,
@@ -49,6 +51,7 @@ public static class NodesLookupTable
                 {
                     id = 2,
                     isRoot = false,
+                    isMain = true,
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 90f, -30f),
                     age = 0f,
@@ -63,6 +66,7 @@ public static class NodesLookupTable
                 {
                     id = 3,
                     isRoot = false,
+                    isMain = false,
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 90f, 30f),
                     age = 0f,

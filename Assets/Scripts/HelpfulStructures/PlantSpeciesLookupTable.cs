@@ -15,6 +15,7 @@ namespace Assets.Scripts.HelpfulStructures
                     maxAge = 950f,
                     gp = 0.12f,
                     tropismMature = 0.2f,
+                    apicalControl = 0.5f,
                     g2 = 0.87f,
                     scalingCoefficientBeta = 1.29f
                 }

@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725109ccce71add40a3f4c75872af1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundingSphere: {fileID: 8809977239519091611}
+  boundingSphere: {fileID: 0}
 --- !u!120 &7409937087785753920
 LineRenderer:
   m_ObjectHideFlags: 0
