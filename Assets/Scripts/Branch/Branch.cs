@@ -1,4 +1,5 @@
 using Assets.Scripts.HelpfulStructures;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,8 +39,6 @@ public class Branch: MonoBehaviour
             //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
             //bool decay = rootNode.age >= prototype.maturityAge;
 
-            terminalNode.nodeGameObject = terminalNode.growNode();
-
             //childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
 
             if (boundingSphere != null)
@@ -52,31 +51,34 @@ public class Branch: MonoBehaviour
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
-            if (terminalNode.age >= prototype.maturityAge)
+            if (terminalNode.age < prototype.maturityAge)
             {
-                if (childBranches.Any())
+                terminalNode.nodeGameObject = terminalNode.growNode();
+                return;
+            }
+
+            if (childBranches.Any())
+            {
+                foreach (Branch childBranch in childBranches)
                 {
-                    foreach (Branch childBranch in childBranches)
-                    {
-                        childBranch.GrowBranch(ageStep);
-                    }
-                    return;
+                    childBranch.GrowBranch(ageStep);
                 }
+                return;
+            }
 
-                foreach (Node prototypeTerminalNode in prototype.terminalNodes)
-                {
-                    int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+            foreach (Node prototypeTerminalNode in prototype.terminalNodes)
+            {
+                int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
 
-                    //if (lookupTableLastKey > 3)
-                    //{
-                    //    stop = true;
-                    //    return;
-                    //}
+                //if (lookupTableLastKey > 3)
+                //{
+                //    stop = true;
+                //    return;
+                //}
 
 
-                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
-                    childBranches.Add(childBranch);
-                }
+                Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
+                childBranches.Add(childBranch);
             }
         }
     }
@@ -89,6 +91,7 @@ public class Branch: MonoBehaviour
         newNode.nodeGameObject = newNode.instantiateNode(newBranchRootNode.nodeGameObject.transform);
         newNode = newNode.nodeGameObject.GetComponent<Node>();
         newNode.id = newNodeId;
+        newNode.isMain = branchPrototypeTerminalNode.isMain;
         newNode.position = branchPrototypeTerminalNode.position;
         newNode.rotation = branchPrototypeTerminalNode.rotation;
         newNode.age = branchPrototypeTerminalNode.age;
@@ -199,19 +202,36 @@ public class Branch: MonoBehaviour
 
     public void distributeVigor(float vigorObtained)
     {
+        vigor = vigorObtained;
+
         if (!childBranches.Any())
         {
-            vigor = vigorObtained;
             return;
         }
 
         Branch mainChildBranch = getMainChildBranch();
-        List<float> lateralBranchesLightExposure = getLateralBranchesLightExposure();
-        float lateralBranchesLightExposureSum = lateralBranchesLightExposure.Sum();
+        Dictionary<int, float> lateralBranchesLightExposure = getLateralBranchesLightExposure();
+        float lateralBranchesLightExposureSum = 0;
+
+        foreach (KeyValuePair<int, float> lateralBranch in lateralBranchesLightExposure)
+        {
+            lateralBranchesLightExposureSum += lateralBranch.Value;
+        }
 
         float apicalControl = terminalNode.plantVariables.apicalControl;
         float vigorToMain = vigorObtained * ((apicalControl * mainChildBranch.lightExposure) /
-            (apicalControl * mainChildBranch.lightExposure) + (1 - apicalControl) * lateralBranchesLightExposureSum);
+            ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
+        float vigorToLateral = vigorObtained - vigorToMain;
+
+        mainChildBranch.distributeVigor(vigorToMain);
+
+        foreach (Branch childBranch in childBranches)
+        {
+            float childBranchLightExposure = lateralBranchesLightExposure.GetValueOrDefault(childBranch.terminalNode.id);
+            float childBranchVigor = vigorToLateral * (childBranchLightExposure / lateralBranchesLightExposureSum);
+
+            childBranch.distributeVigor(childBranchVigor);
+        }
     }
 
     private Branch getMainChildBranch()
@@ -225,13 +245,13 @@ public class Branch: MonoBehaviour
         return null;
     }
 
-    private List<float> getLateralBranchesLightExposure()
+    private Dictionary<int, float> getLateralBranchesLightExposure()
     {
-        List<float> result = new List<float>();
+        Dictionary<int, float> result = new Dictionary<int, float>();
         foreach (Branch childBranch in childBranches)
         {
             if (!childBranch.terminalNode.isMain)
-                result.Add(childBranch.lightExposure);
+                result.Add(childBranch.terminalNode.id, childBranch.lightExposure);
         }
 
         return result;

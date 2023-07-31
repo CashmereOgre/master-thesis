@@ -19,7 +19,8 @@ public class Node : MonoBehaviour
     public GameObject nodeGameObject;
 
     public LineRenderer branchLineRenderer;
-    private Node parentNode; 
+    private Node parentNode;
+    private float growthRate;
 
     public Node() {}
 
@@ -69,10 +70,18 @@ public class Node : MonoBehaviour
 
             nodeGameObject.transform.localPosition = position;
 
+            // NEW CALCULATION METHOD
+
+
             branchLineRenderer.SetPositions(new Vector3[2] { nodeGameObject.transform.position, parentNode.nodeGameObject.transform.position });
         }
 
         return nodeGameObject;
+    }
+
+    private float getGrowthRate()
+    {
+        return 0;
     }
 
     public LineRenderer setBranchLineRenderer()

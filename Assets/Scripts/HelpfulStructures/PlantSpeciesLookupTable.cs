@@ -16,6 +16,8 @@ namespace Assets.Scripts.HelpfulStructures
                     gp = 0.12f,
                     tropismMature = 0.2f,
                     apicalControl = 0.5f,
+                    vigorMax = 900f,
+                    vigorMin = 0.5f,
                     g2 = 0.87f,
                     scalingCoefficientBeta = 1.29f
                 }

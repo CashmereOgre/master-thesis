@@ -24,6 +24,7 @@ public class PlantComponent : MonoBehaviour
         rootNode.nodeGameObject = rootNode.instantiateNode(null);
         rootNode = rootNode.nodeGameObject.GetComponent<Node>();
         rootNode.id = rootNodePrototype.id;
+        rootNode.isMain = rootNodePrototype.isMain;
         rootNode.position = rootNodePrototype.position;
         rootNode.rotation = rootNodePrototype.rotation;
         rootNode.age = rootNodePrototype.age;
@@ -40,6 +41,7 @@ public class PlantComponent : MonoBehaviour
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         terminalNode = terminalNode.nodeGameObject.GetComponent<Node>();
         terminalNode.id = terminalNodePrototype.id;
+        terminalNode.isMain = terminalNodePrototype.isMain;
         terminalNode.position = terminalNodePrototype.position;
         terminalNode.rotation = terminalNodePrototype.rotation;
         terminalNode.age = terminalNodePrototype.age;
@@ -73,6 +75,9 @@ public class PlantComponent : MonoBehaviour
 
         plant.totalLightExposure = plant.trunk.calculateLightExposure();
         Debug.Log(plant.totalLightExposure);
+
+        float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
+        plant.trunk.distributeVigor(vigor);
         //}
     }
 }

@@ -9,6 +9,8 @@ public class PlantSpecies
     //public float tropism { get; set; }
     public float tropismMature { get; set; }   /// Tropism decrease by age
     public float apicalControl { get; set; }
+    public float vigorMax { get; set; }
+    public float vigorMin { get; set; }
     //public float determinism { get; set; }
     //public float determinismMature { get; set; }
 	public float g2 { get; set; }   /// Tropism strength overall
