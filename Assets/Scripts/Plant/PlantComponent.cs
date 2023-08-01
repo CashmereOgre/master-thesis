@@ -28,6 +28,7 @@ public class PlantComponent : MonoBehaviour
         rootNode.position = rootNodePrototype.position;
         rootNode.rotation = rootNodePrototype.rotation;
         rootNode.age = rootNodePrototype.age;
+        rootNode.physiologicalAge = rootNodePrototype.physiologicalAge;
         rootNode.maxLength = rootNodePrototype.maxLength;
         rootNode.plantVariables = rootNodePrototype.plantVariables;
         rootNode.parentNodeId = rootNodePrototype.parentNodeId;
@@ -45,6 +46,7 @@ public class PlantComponent : MonoBehaviour
         terminalNode.position = terminalNodePrototype.position;
         terminalNode.rotation = terminalNodePrototype.rotation;
         terminalNode.age = terminalNodePrototype.age;
+        terminalNode.physiologicalAge = terminalNodePrototype.physiologicalAge;
         terminalNode.maxLength = terminalNodePrototype.maxLength;
         terminalNode.plantVariables = terminalNodePrototype.plantVariables;
         terminalNode.parentNodeId = terminalNodePrototype.parentNodeId;
@@ -67,17 +69,18 @@ public class PlantComponent : MonoBehaviour
         plant = new Plant(trunk);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         //if (Input.GetKeyDown("space"))
         //{
-        plant.trunk.GrowBranch(0.1f);
 
         plant.totalLightExposure = plant.trunk.calculateLightExposure();
         Debug.Log(plant.totalLightExposure);
 
         float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
         plant.trunk.distributeVigor(vigor);
+
+        plant.trunk.GrowBranch(1000f);
         //}
     }
 }

@@ -13,6 +13,7 @@ public class PlantSpecies
     public float vigorMin { get; set; }
     //public float determinism { get; set; }
     //public float determinismMature { get; set; }
+    public float g1 { get; set; }
 	public float g2 { get; set; }   /// Tropism strength overall
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
     //public float optimalTemperature { get; set; }

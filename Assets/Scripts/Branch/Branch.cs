@@ -51,9 +51,10 @@ public class Branch: MonoBehaviour
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
-            if (terminalNode.age < prototype.maturityAge)
+            if (terminalNode.physiologicalAge < prototype.maturityAge)
             {
-                terminalNode.nodeGameObject = terminalNode.growNode();
+                float physiologicalAge = getPhysiologicalAge(ageStep);
+                terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
                 return;
             }
 
@@ -95,6 +96,7 @@ public class Branch: MonoBehaviour
         newNode.position = branchPrototypeTerminalNode.position;
         newNode.rotation = branchPrototypeTerminalNode.rotation;
         newNode.age = branchPrototypeTerminalNode.age;
+        newNode.physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         newNode.maxLength = branchPrototypeTerminalNode.maxLength;
         newNode.plantVariables = branchPrototypeTerminalNode.plantVariables;
         newNode.parentNodeId = rootNodeId;  
@@ -178,16 +180,13 @@ public class Branch: MonoBehaviour
         intersectionsSum = 0;
         lightExposure = 0;
 
-        if(terminalNode.id != 1)
+        foreach (KeyValuePair<int, CollisionInfo> collisionInfo in collidersDictionary)
         {
-            foreach (KeyValuePair<int, CollisionInfo> collisionInfo in collidersDictionary)
-            {
-                intersectionsSum += collisionInfo.Value.volumeOfCollision;
-            }
-
-            float currentBranchLightExposure = Mathf.Exp(-intersectionsSum);
-            lightExposure += currentBranchLightExposure;
+            intersectionsSum += collisionInfo.Value.volumeOfCollision;
         }
+
+        float currentBranchLightExposure = Mathf.Exp(-intersectionsSum);
+        lightExposure += currentBranchLightExposure;
 
         if (childBranches.Any())
         {
@@ -232,6 +231,21 @@ public class Branch: MonoBehaviour
 
             childBranch.distributeVigor(childBranchVigor);
         }
+    }
+
+    private float getGrowthRate()
+    {
+        float vigorMin = terminalNode.plantVariables.vigorMin;
+        float vigorMax = terminalNode.plantVariables.vigorMax;
+        float x = (vigor - vigorMin) / (vigorMax - vigorMin);
+
+        return (3 * Mathf.Pow(x, 2) - 2 * Mathf.Pow(x, 3)) * terminalNode.plantVariables.gp;
+    }
+
+    private float getPhysiologicalAge(float timeStep)
+    {
+        float growthRate = getGrowthRate();
+        return terminalNode.physiologicalAge + (timeStep * getGrowthRate());
     }
 
     private Branch getMainChildBranch()

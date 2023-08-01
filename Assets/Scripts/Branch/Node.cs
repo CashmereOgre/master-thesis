@@ -11,6 +11,7 @@ public class Node : MonoBehaviour
     public Vector3 position { get; set; }
     public Quaternion rotation { get; set; }
     public float age { get; set; }
+    public float physiologicalAge { get; set; }
     public float maxLength { get; set; }
     public PlantSpecies plantVariables { get; set; }
     public int parentNodeId { get; set; }
@@ -32,6 +33,7 @@ public class Node : MonoBehaviour
         position = branchPrototypeTerminalNode.position;
         rotation = branchPrototypeTerminalNode.rotation;
         age = branchPrototypeTerminalNode.age;
+        physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         maxLength = branchPrototypeTerminalNode.maxLength;
         plantVariables = branchPrototypeTerminalNode.plantVariables;
         parentNodeId = 0;
@@ -47,9 +49,11 @@ public class Node : MonoBehaviour
         return Instantiate(nodeGameObject, parentObjectTransform);
     }
 
-    public GameObject growNode()
+    public GameObject growNode(float physAge)
     {
-        float branchLength = Math.Min(maxLength, age * plantVariables.scalingCoefficientBeta);
+        physiologicalAge = physAge;
+
+        float branchLength = Math.Min(maxLength, physiologicalAge * 100 * plantVariables.scalingCoefficientBeta);
 
         if (branchLength != maxLength)
         {
@@ -60,28 +64,23 @@ public class Node : MonoBehaviour
 
             position = Vector3.zero + branchVector;
 
-            float g1 = (float)Math.Pow(0.95f, age * plantVariables.tropismMature);
-            float g2 = -plantVariables.g2;
+            float g1 = plantVariables.g1;
+            float g2 = plantVariables.g2;
             Vector3 gravityDirection = new Vector3(0.0f, -1.0f, 0.0f);
 
-            Vector3 tropismOffset = (g1 * g2 * gravityDirection) / Math.Max(age + g1, 0.05f);
+            Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (physiologicalAge * 100 + g1);
+
+            if (float.IsNaN(tropismOffset.x))
+                Debug.LogWarning("NaN");
 
             position += tropismOffset * branchLength;
 
             nodeGameObject.transform.localPosition = position;
 
-            // NEW CALCULATION METHOD
-
-
             branchLineRenderer.SetPositions(new Vector3[2] { nodeGameObject.transform.position, parentNode.nodeGameObject.transform.position });
         }
 
         return nodeGameObject;
-    }
-
-    private float getGrowthRate()
-    {
-        return 0;
     }
 
     public LineRenderer setBranchLineRenderer()

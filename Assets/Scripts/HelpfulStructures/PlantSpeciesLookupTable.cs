@@ -18,7 +18,8 @@ namespace Assets.Scripts.HelpfulStructures
                     apicalControl = 0.5f,
                     vigorMax = 900f,
                     vigorMin = 0.5f,
-                    g2 = 0.87f,
+                    g1 = 0.2f,
+                    g2 = 0.5f, // self-made parameter
                     scalingCoefficientBeta = 1.29f
                 }
             }
