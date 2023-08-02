@@ -15,6 +15,7 @@ public class PlantSpecies
     //public float determinismMature { get; set; }
     public float g1 { get; set; }
 	public float g2 { get; set; }   /// Tropism strength overall
+    public float w2 { get; set; }
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
     //public float optimalTemperature { get; set; }
     //public float optimalPrecipitation { get; set; }

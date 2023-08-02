@@ -20,6 +20,7 @@ namespace Assets.Scripts.HelpfulStructures
                     vigorMin = 0.5f,
                     g1 = 0.2f,
                     g2 = 0.5f, // self-made parameter
+                    w2 = 0.14f,
                     scalingCoefficientBeta = 1.29f
                 }
             }

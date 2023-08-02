@@ -39,7 +39,7 @@ public class Branch: MonoBehaviour
             //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
             //bool decay = rootNode.age >= prototype.maturityAge;
 
-            //childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
+            childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
 
             if (boundingSphere != null)
             {
@@ -125,27 +125,27 @@ public class Branch: MonoBehaviour
     private Vector3 getBranchCenterOfGeometry()
     {
         Vector3 center = Vector3.zero;
-        var childDictionary = new Dictionary<int, Vector3>();
+        //var childDictionary = new Dictionary<int, Vector3>();
 
 
-        if (childBranches.Any()) 
-        { 
-            foreach (Branch child in childBranches)
-            {
-                childDictionary.Add(child.terminalNode.id, child.terminalNode.nodeGameObject.transform.position);
-            }
+        //if (childBranches.Any()) 
+        //{ 
+        //    foreach (Branch child in childBranches)
+        //    {
+        //        childDictionary.Add(child.terminalNode.id, child.terminalNode.nodeGameObject.transform.position);
+        //    }
 
-            int i = 0;
-            foreach (KeyValuePair<int, Vector3> position in childDictionary)
-            {
-                center = center + position.Value + terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position;
-                i++;
-            }
+        //    int i = 0;
+        //    foreach (KeyValuePair<int, Vector3> position in childDictionary)
+        //    {
+        //        center = center + position.Value + terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position;
+        //        i++;
+        //    }
 
-            center = center / ((childDictionary.Count + 1) * 2);
+        //    center = center / ((childDictionary.Count + 1) * 2);
 
-            return center;
-        }
+        //    return center;
+        //}
 
         center = (terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position) / 2;
 
@@ -209,10 +209,10 @@ public class Branch: MonoBehaviour
         }
 
         Branch mainChildBranch = getMainChildBranch();
-        Dictionary<int, float> lateralBranchesLightExposure = getLateralBranchesLightExposure();
+        Dictionary<int, float> branchesLightExposure = getLateralBranchesLightExposure();
         float lateralBranchesLightExposureSum = 0;
 
-        foreach (KeyValuePair<int, float> lateralBranch in lateralBranchesLightExposure)
+        foreach (KeyValuePair<int, float> lateralBranch in branchesLightExposure)
         {
             lateralBranchesLightExposureSum += lateralBranch.Value;
         }
@@ -222,11 +222,15 @@ public class Branch: MonoBehaviour
             ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
         float vigorToLateral = vigorObtained - vigorToMain;
 
-        mainChildBranch.distributeVigor(vigorToMain);
-
         foreach (Branch childBranch in childBranches)
         {
-            float childBranchLightExposure = lateralBranchesLightExposure.GetValueOrDefault(childBranch.terminalNode.id);
+            if(childBranch.terminalNode.isMain)
+            {
+                mainChildBranch.distributeVigor(vigorToMain);
+                continue;
+            }
+
+            float childBranchLightExposure = branchesLightExposure.GetValueOrDefault(childBranch.terminalNode.id);
             float childBranchVigor = vigorToLateral * (childBranchLightExposure / lateralBranchesLightExposureSum);
 
             childBranch.distributeVigor(childBranchVigor);
@@ -287,6 +291,9 @@ public class Branch: MonoBehaviour
                 return;
 
             int collidingObjectId = int.Parse(collision.collider.gameObject.name);
+
+            if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
+                return;
 
             SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
             float r1 = boundingSphere.radius;
