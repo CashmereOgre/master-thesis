@@ -16,6 +16,7 @@ public class Branch: MonoBehaviour
     public List<Branch> childBranches { get; set; }
 
     public SphereCollider boundingSphere;
+    public CapsuleCollider capsuleCollider;
     public float lightExposure = 0;
 
     private bool stop = false;
@@ -48,6 +49,8 @@ public class Branch: MonoBehaviour
                 float boundingSphereRadius = Vector3.Distance(rootNode.nodeGameObject.transform.position, branchCenterOfGeometry);
                 boundingSphere = updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
             }
+
+            capsuleCollider = updateCapsuleColliderDimensions();
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
@@ -118,6 +121,7 @@ public class Branch: MonoBehaviour
         {
             childBranch.boundingSphere = childBranch.setBoundingSphere();
         }
+        childBranch.capsuleCollider = childBranch.setCapsuleCollider();
 
         return childBranch;
     }
@@ -171,6 +175,13 @@ public class Branch: MonoBehaviour
     public SphereCollider setBoundingSphere()
     {
         var collider = terminalNode.nodeGameObject.GetComponent<SphereCollider>();
+
+        return collider;
+    }
+
+    public CapsuleCollider setCapsuleCollider()
+    {
+        var collider = terminalNode.nodeGameObject.GetComponent<CapsuleCollider>();
 
         return collider;
     }
@@ -281,6 +292,18 @@ public class Branch: MonoBehaviour
         boundingSphere.radius = radius;
 
         return boundingSphere;
+    }
+
+    private CapsuleCollider updateCapsuleColliderDimensions()
+    {
+        Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
+        Vector3 localizedBranchCenterOfGeometry = terminalNode.nodeGameObject.transform.InverseTransformPoint(branchCenterOfGeometry);
+        float capsuleColliderHeight  = Vector3.Distance(rootNode.nodeGameObject.transform.position, terminalNode.nodeGameObject.transform.position);
+
+        capsuleCollider.center = localizedBranchCenterOfGeometry;
+        capsuleCollider.height = capsuleColliderHeight;
+
+        return capsuleCollider;
     }
 
     private void OnCollisionStay(Collision collision)

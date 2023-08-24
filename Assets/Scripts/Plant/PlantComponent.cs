@@ -65,6 +65,7 @@ public class PlantComponent : MonoBehaviour
         trunk.childBranches = new List<Branch>();
 
         trunk.boundingSphere = trunk.setBoundingSphere();
+        trunk.capsuleCollider = trunk.setCapsuleCollider();
 
         plant = new Plant(trunk);
     }
