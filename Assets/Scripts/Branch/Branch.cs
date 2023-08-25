@@ -54,7 +54,13 @@ public class Branch: MonoBehaviour
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
-            if (terminalNode.physiologicalAge < prototype.maturityAge)
+            //if (terminalNode.physiologicalAge < prototype.maturityAge)
+            //{
+            //    float physiologicalAge = getPhysiologicalAge(ageStep);
+            //    terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
+            //    return;
+            //}
+            if (terminalNode.age < prototype.maturityAge)
             {
                 float physiologicalAge = getPhysiologicalAge(ageStep);
                 terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
@@ -117,10 +123,10 @@ public class Branch: MonoBehaviour
         childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId); 
         childBranch.childBranches = new List<Branch>();
 
-        if (boundingSphere == null)
-        {
-            childBranch.boundingSphere = childBranch.setBoundingSphere();
-        }
+        //if (boundingSphere == null)
+        //{
+        //    childBranch.boundingSphere = childBranch.setBoundingSphere();
+        //}
         childBranch.capsuleCollider = childBranch.setCapsuleCollider();
 
         return childBranch;
@@ -128,30 +134,7 @@ public class Branch: MonoBehaviour
 
     private Vector3 getBranchCenterOfGeometry()
     {
-        Vector3 center = Vector3.zero;
-        //var childDictionary = new Dictionary<int, Vector3>();
-
-
-        //if (childBranches.Any()) 
-        //{ 
-        //    foreach (Branch child in childBranches)
-        //    {
-        //        childDictionary.Add(child.terminalNode.id, child.terminalNode.nodeGameObject.transform.position);
-        //    }
-
-        //    int i = 0;
-        //    foreach (KeyValuePair<int, Vector3> position in childDictionary)
-        //    {
-        //        center = center + position.Value + terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position;
-        //        i++;
-        //    }
-
-        //    center = center / ((childDictionary.Count + 1) * 2);
-
-        //    return center;
-        //}
-
-        center = (terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position) / 2;
+        Vector3 center = (terminalNode.nodeGameObject.transform.position + rootNode.nodeGameObject.transform.position) / 2;
 
         return center;
     }
@@ -306,39 +289,39 @@ public class Branch: MonoBehaviour
         return capsuleCollider;
     }
 
-    private void OnCollisionStay(Collision collision)
-    {
-        if (boundingSphere != null)
-        {
-            if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
-                return;
+    //private void OnCollisionStay(Collision collision)
+    //{
+    //    if (boundingSphere != null)
+    //    {
+    //        if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
+    //            return;
 
-            int collidingObjectId = int.Parse(collision.collider.gameObject.name);
+    //        int collidingObjectId = int.Parse(collision.collider.gameObject.name);
 
-            if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
-                return;
+    //        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
+    //            return;
 
-            SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
-            float r1 = boundingSphere.radius;
-            float r2 = collider.radius;
-            Vector3 boundingSphereCenter = boundingSphere.bounds.center;
-            Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
+    //        SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
+    //        float r1 = boundingSphere.radius;
+    //        float r2 = collider.radius;
+    //        Vector3 boundingSphereCenter = boundingSphere.bounds.center;
+    //        Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
 
-            float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
+    //        float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
 
-            if (distance == 0)
-                return;
+    //        if (distance == 0)
+    //            return;
 
-            float term1 = Mathf.Pow(r1 + r2 - distance, 2);
-            float term2 = distance * distance + 2 * distance * r2 - 3 * r2 * r2 + 2 * distance * r1 + 6 * r1 * r2 - 3 * r1 * r1;
-            float volumeOfIntersection = Mathf.PI * term1 * term2 / (12 * distance);
+    //        float term1 = Mathf.Pow(r1 + r2 - distance, 2);
+    //        float term2 = distance * distance + 2 * distance * r2 - 3 * r2 * r2 + 2 * distance * r1 + 6 * r1 * r2 - 3 * r1 * r1;
+    //        float volumeOfIntersection = Mathf.PI * term1 * term2 / (12 * distance);
 
-            if (volumeOfIntersection < 0)
-                return;
+    //        if (volumeOfIntersection < 0)
+    //            return;
 
-            collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, colliderCenter, r2, distance);
+    //        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, colliderCenter, r2, distance);
 
-            //Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}");
-        }
-    }
+    //        //Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}");
+    //    }
+    //}
 }
