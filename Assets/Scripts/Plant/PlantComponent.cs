@@ -10,6 +10,8 @@ public class PlantComponent : MonoBehaviour
 
     public GameObject nodePrefab;
 
+    public Raycaster raycaster;
+
     void Start()
     {
         initializePlant();
@@ -35,7 +37,6 @@ public class PlantComponent : MonoBehaviour
         rootNode.childNodeIds = rootNodePrototype.childNodeIds;
         rootNode.nodeGameObject.transform.localRotation = rootNode.rotation;
         rootNode.nodeGameObject.name = "Root";
-        rootNode.nodeGameObject.transform.position = new Vector3(10f, 0f, 10f);
         NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
 
         Node terminalNodePrototype = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
@@ -73,6 +74,7 @@ public class PlantComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
+        RaycastCollisionsLookupTable.objectRayCountsDictionary = raycaster.CastRaysSquare(100, 50);
         //if (Input.GetKeyDown("space"))
         //{
 

@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 6551240598046226684, guid: 8e5620a43d1dba946ad96ecd3c440517, type: 3}
+  raycaster: {fileID: 365712316}
 --- !u!4 &395314703
 Transform:
   m_ObjectHideFlags: 0

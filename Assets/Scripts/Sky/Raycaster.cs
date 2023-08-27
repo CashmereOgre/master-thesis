@@ -2,44 +2,58 @@ using Assets.Scripts.HelpfulStructures;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class Raycaster : MonoBehaviour
 {
-    private int numberOfRays = 360;
-    private float maxDistance = 100;
-
-    private void Update()
+    public Dictionary<string, int> CastRaysSquare(int squareDimension, float squareHeight)
     {
-        castRays();
-    }
-
-    private void castRays()
-    {
+        float startingCorner = -(squareDimension / 2);
         Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
-        Vector3 startingPoint = new Vector3(maxDistance, 0f, 0f);
-        float angleBetweenPoints = 360f / numberOfRays;
+        Vector3 currentPoint = new Vector3(startingCorner, squareHeight, startingCorner);
 
-        for (int i = 0; i <= numberOfRays / 2; i++)
+        for (int i = 0; i <= squareDimension; i++)
         {
-            float angleZ = i * angleBetweenPoints;
-
-            for (int j = 0; j < numberOfRays; j++)
+            for (int j = 0; j <= squareDimension; j++)
             {
-                float angleY = j * angleBetweenPoints;
-                Vector3 point = getRotatedPoint(startingPoint, angleZ, angleY);
-                Vector3 direction = Vector3.zero - point;
-                direction.Normalize();
-                Ray ray = new Ray(point, direction);
-                RaycastHit hit;
+                List<Vector3> directions = getDirections(currentPoint);
 
-                Physics.Raycast(ray, out hit, maxDistance * 2);
+                foreach (Vector3 direction in directions)
+                {
+                    Ray ray = new Ray(currentPoint, direction);
+                    RaycastHit hit;
 
-                addRayToDictionary(hit, objectRayCountsDictionary);
+                    Physics.Raycast(ray, out hit, squareHeight * Mathf.Sqrt(2));
+
+                    addRayToDictionary(hit, objectRayCountsDictionary);
+                }
+
+                currentPoint.x += 1;
             }
+            currentPoint.z += 1;
+            currentPoint.x = startingCorner;
         }
 
-        RaycastCollisionsLookupTable.objectRayCountsDictionary = objectRayCountsDictionary;
+        return objectRayCountsDictionary;
+    }
+
+    private List<Vector3> getDirections(Vector3 currentPoint)
+    {
+        Vector3 endPoint1 = new Vector3(currentPoint.x, 0, currentPoint.z);
+        Vector3 endPoint2 = new Vector3(currentPoint.x + currentPoint.y, 0, currentPoint.z);
+        Vector3 endPoint3 = new Vector3(currentPoint.x - currentPoint.y, 0, currentPoint.z);
+        Vector3 endPoint4 = new Vector3(currentPoint.x, 0, currentPoint.z + currentPoint.y);
+        Vector3 endPoint5 = new Vector3(currentPoint.x, 0, currentPoint.z - currentPoint.y);
+
+        return new List<Vector3>
+        {
+            (endPoint1 - currentPoint).normalized,
+            (endPoint2 - currentPoint).normalized,
+            (endPoint3 - currentPoint).normalized,
+            (endPoint4 - currentPoint).normalized,
+            (endPoint5 - currentPoint).normalized
+        };
     }
 
     private void addRayToDictionary(RaycastHit hit, Dictionary<string, int> objectRayCountsDictionary)
@@ -56,13 +70,4 @@ public class Raycaster : MonoBehaviour
             objectRayCountsDictionary.Add(colliderGameObjectName, 1);
         }
     }
-
-    private Vector3 getRotatedPoint(Vector3 point, float angleZ, float angleY)
-    {
-        Quaternion quaternion = Quaternion.Euler(0f, angleY, angleZ);
-
-        return quaternion * point;
-    }
-
-
 }

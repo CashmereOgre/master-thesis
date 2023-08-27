@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 832933384462909891}
   - component: {fileID: 6381952309487861893}
   - component: {fileID: 7409937087785753920}
-  - component: {fileID: 8809977239519091611}
   - component: {fileID: 2344861228695994019}
   - component: {fileID: 7541922549228653165}
   m_Layer: 0
@@ -215,19 +214,6 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!135 &8809977239519091611
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6551240598046226684}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &2344861228695994019
 Rigidbody:
   m_ObjectHideFlags: 0
