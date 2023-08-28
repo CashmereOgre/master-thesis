@@ -53,8 +53,7 @@ public class Node : MonoBehaviour
     {
         physiologicalAge = physAge;
 
-        //float branchLength = Math.Min(maxLength, physiologicalAge * 100 * plantVariables.scalingCoefficientBeta);
-        float branchLength = Math.Min(maxLength, age * plantVariables.scalingCoefficientBeta);
+        float branchLength = Math.Min(maxLength, physiologicalAge * plantVariables.scalingCoefficientBeta);
 
         if (branchLength != maxLength)
         {
@@ -69,8 +68,7 @@ public class Node : MonoBehaviour
             float g2 = plantVariables.g2;
             Vector3 gravityDirection = new Vector3(0.0f, -1.0f, 0.0f);
 
-            //Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (physiologicalAge * 100 + g1);
-            Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (age + g1);
+            Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (physiologicalAge + g1);
 
             if (float.IsNaN(tropismOffset.x))
                 Debug.LogWarning("NaN");

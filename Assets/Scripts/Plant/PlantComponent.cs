@@ -37,6 +37,7 @@ public class PlantComponent : MonoBehaviour
         rootNode.childNodeIds = rootNodePrototype.childNodeIds;
         rootNode.nodeGameObject.transform.localRotation = rootNode.rotation;
         rootNode.nodeGameObject.name = "Root";
+        Destroy(rootNode.nodeGameObject.GetComponent<CapsuleCollider>());
         NodesLookupTable.nodesDictionary.Add(rootNode.id, rootNode);
 
         Node terminalNodePrototype = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
@@ -66,7 +67,6 @@ public class PlantComponent : MonoBehaviour
         trunk.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(1);
         trunk.childBranches = new List<Branch>();
 
-        //trunk.boundingSphere = trunk.setBoundingSphere();
         trunk.capsuleCollider = trunk.setCapsuleCollider();
 
         plant = new Plant(trunk);
@@ -74,17 +74,12 @@ public class PlantComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RaycastCollisionsLookupTable.objectRayCountsDictionary = raycaster.CastRaysSquare(100, 50);
-        //if (Input.GetKeyDown("space"))
-        //{
+        RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare(100, 50);
 
-        //plant.totalLightExposure = plant.trunk.calculateLightExposure();
-        //Debug.Log(plant.totalLightExposure);
+        plant.totalLightExposure = plant.trunk.calculateLightExposure();
 
-        //float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
-        //plant.trunk.distributeVigor(vigor);
-
-        plant.trunk.GrowBranch(0.1f);
-        //}
+        float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
+        plant.trunk.distributeVigor(vigor);
+        plant.trunk.GrowBranch(2000000f); //approx. month in seconds
     }
 }

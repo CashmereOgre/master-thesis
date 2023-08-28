@@ -22,9 +22,7 @@ public class Branch: MonoBehaviour
     private bool stop = false;
 
     private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
-    private Dictionary<int, CollisionInfo> collidersDictionary = new Dictionary<int, CollisionInfo>();
 
-    private float intersectionsSum = 0;
     private float vigor = 0;
 
     public void GrowBranch(float ageStep)
@@ -42,25 +40,11 @@ public class Branch: MonoBehaviour
 
             childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
 
-            if (boundingSphere != null)
-            {
-                Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
-                Vector3 localizedBranchCenterOfGeometry = terminalNode.nodeGameObject.transform.InverseTransformPoint(branchCenterOfGeometry);
-                float boundingSphereRadius = Vector3.Distance(rootNode.nodeGameObject.transform.position, branchCenterOfGeometry);
-                boundingSphere = updateBoundingSpherePositionAndRadius(localizedBranchCenterOfGeometry, boundingSphereRadius);
-            }
-
             capsuleCollider = updateCapsuleColliderDimensions();
 
             //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
 
-            //if (terminalNode.physiologicalAge < prototype.maturityAge)
-            //{
-            //    float physiologicalAge = getPhysiologicalAge(ageStep);
-            //    terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
-            //    return;
-            //}
-            if (terminalNode.age < prototype.maturityAge)
+            if (terminalNode.physiologicalAge < prototype.maturityAge)
             {
                 float physiologicalAge = getPhysiologicalAge(ageStep);
                 terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
@@ -79,13 +63,6 @@ public class Branch: MonoBehaviour
             foreach (Node prototypeTerminalNode in prototype.terminalNodes)
             {
                 int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
-
-                //if (lookupTableLastKey > 3)
-                //{
-                //    stop = true;
-                //    return;
-                //}
-
 
                 Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
                 childBranches.Add(childBranch);
@@ -123,10 +100,6 @@ public class Branch: MonoBehaviour
         childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId); 
         childBranch.childBranches = new List<Branch>();
 
-        //if (boundingSphere == null)
-        //{
-        //    childBranch.boundingSphere = childBranch.setBoundingSphere();
-        //}
         childBranch.capsuleCollider = childBranch.setCapsuleCollider();
 
         return childBranch;
@@ -155,13 +128,6 @@ public class Branch: MonoBehaviour
         return result;
     }
 
-    public SphereCollider setBoundingSphere()
-    {
-        var collider = terminalNode.nodeGameObject.GetComponent<SphereCollider>();
-
-        return collider;
-    }
-
     public CapsuleCollider setCapsuleCollider()
     {
         var collider = terminalNode.nodeGameObject.GetComponent<CapsuleCollider>();
@@ -171,15 +137,14 @@ public class Branch: MonoBehaviour
 
     public float calculateLightExposure()
     {
-        intersectionsSum = 0;
+        float currentBranchLightExposure = 0;
         lightExposure = 0;
 
-        foreach (KeyValuePair<int, CollisionInfo> collisionInfo in collidersDictionary)
+        if (RaycastCollisionsLookupTable.objectRayCountDictionary.TryGetValue(gameObject.name, out int rays))
         {
-            intersectionsSum += collisionInfo.Value.volumeOfCollision;
+            currentBranchLightExposure = rays / capsuleCollider.height;
         }
-
-        float currentBranchLightExposure = Mathf.Exp(-intersectionsSum);
+        
         lightExposure += currentBranchLightExposure;
 
         if (childBranches.Any())
@@ -242,7 +207,6 @@ public class Branch: MonoBehaviour
 
     private float getPhysiologicalAge(float timeStep)
     {
-        float growthRate = getGrowthRate();
         return terminalNode.physiologicalAge + (timeStep * getGrowthRate());
     }
 
@@ -269,14 +233,6 @@ public class Branch: MonoBehaviour
         return result;
     }
 
-    private SphereCollider updateBoundingSpherePositionAndRadius(Vector3 position, float radius)
-    {
-        boundingSphere.center = position;
-        boundingSphere.radius = radius;
-
-        return boundingSphere;
-    }
-
     private CapsuleCollider updateCapsuleColliderDimensions()
     {
         Vector3 branchCenterOfGeometry = getBranchCenterOfGeometry();
@@ -284,7 +240,7 @@ public class Branch: MonoBehaviour
         float capsuleColliderHeight  = Vector3.Distance(rootNode.nodeGameObject.transform.position, terminalNode.nodeGameObject.transform.position);
 
         capsuleCollider.center = localizedBranchCenterOfGeometry;
-        capsuleCollider.height = capsuleColliderHeight;
+        capsuleCollider.height = capsuleColliderHeight > 1 ? capsuleColliderHeight : 1;
 
         return capsuleCollider;
     }

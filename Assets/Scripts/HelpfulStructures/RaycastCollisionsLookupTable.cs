@@ -8,6 +8,6 @@ namespace Assets.Scripts.HelpfulStructures
 {
     public static class RaycastCollisionsLookupTable
     {
-        public static Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
+        public static Dictionary<string, int> objectRayCountDictionary = new Dictionary<string, int>();
     }
 }
