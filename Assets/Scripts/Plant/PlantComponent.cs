@@ -85,6 +85,6 @@ public class PlantComponent : MonoBehaviour
 
         float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
         plant.trunk.distributeVigor(vigor);
-        plant.trunk.GrowBranch(2000000f); //approx. month in seconds
+        plant.trunk.GrowBranch(1000f); //approx. month in seconds
     }
 }

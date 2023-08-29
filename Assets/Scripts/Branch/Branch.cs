@@ -60,12 +60,15 @@ public class Branch: MonoBehaviour
                 return;
             }
 
-            foreach (Node prototypeTerminalNode in prototype.terminalNodes)
+            if (vigor > terminalNode.plantVariables.vigorMin)
             {
-                int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+                foreach (Node prototypeTerminalNode in prototype.terminalNodes)
+                {
+                    int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
 
-                Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
-                childBranches.Add(childBranch);
+                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
+                    childBranches.Add(childBranch);
+                }
             }
         }
     }
@@ -168,6 +171,7 @@ public class Branch: MonoBehaviour
         }
 
         Branch mainChildBranch = getMainChildBranch();
+        //fix abnormal branch behaviour if light exposure is 0
         Dictionary<int, float> branchesLightExposure = getLateralBranchesLightExposure();
         float lateralBranchesLightExposureSum = 0;
 
@@ -180,7 +184,12 @@ public class Branch: MonoBehaviour
         float vigorToMain;
         float vigorToLateral;
 
-        if (lateralBranchesLightExposureSum <= 0)
+        if (mainChildBranch == null)
+        {
+            vigorToMain = 0;
+            vigorToLateral = vigorObtained;
+        }
+        else if (lateralBranchesLightExposureSum <= 0)
         {
             vigorToMain = vigorObtained;
             vigorToLateral = 0;
@@ -192,17 +201,25 @@ public class Branch: MonoBehaviour
             vigorToLateral = vigorObtained - vigorToMain;
         }
 
-        foreach (Branch childBranch in childBranches)
+
+        foreach (Branch childBranch in childBranches.ToList())
         {
-            if(childBranch.terminalNode.isMain)
+            float vigorMin = childBranch.terminalNode.plantVariables.vigorMin;
+
+            if (childBranch.terminalNode.isMain)
             {
-                mainChildBranch.distributeVigor(vigorToMain);
+                if(vigorToMain < vigorMin)
+                {
+                    destroyChildBranch(childBranch);
+                    continue;
+                }
+                childBranch.distributeVigor(vigorToMain);
                 continue;
             }
 
-            if(vigorToLateral == 0)
+            if(vigorToLateral < vigorMin)
             {
-                childBranch.distributeVigor(0);
+                destroyChildBranch(childBranch);
                 continue;
             }
 
@@ -260,6 +277,12 @@ public class Branch: MonoBehaviour
         capsuleCollider.height = capsuleColliderHeight > 1 ? capsuleColliderHeight : 1;
 
         return capsuleCollider;
+    }
+
+    private void destroyChildBranch(Branch childBranch)
+    {
+        childBranches.Remove(childBranch);
+        Destroy(childBranch.terminalNode.gameObject);
     }
 
     //private void OnCollisionStay(Collision collision)
