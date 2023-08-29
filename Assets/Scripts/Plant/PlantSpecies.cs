@@ -7,7 +7,7 @@ public class PlantSpecies
     public float maxAge { get; set; } /// Max age
 	public float gp { get; set; }  /// Growth Rate
     //public float tropism { get; set; }
-    public float tropismMature { get; set; }   /// Tropism decrease by age
+    public float tropism { get; set; }   /// Tropism decrease by age
     public float apicalControl { get; set; }
     public float vigorMax { get; set; }
     public float vigorMin { get; set; }
@@ -15,6 +15,7 @@ public class PlantSpecies
     //public float determinismMature { get; set; }
     public float g1 { get; set; }
 	public float g2 { get; set; }   /// Tropism strength overall
+    public float w2 { get; set; }
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
     //public float optimalTemperature { get; set; }
     //public float optimalPrecipitation { get; set; }

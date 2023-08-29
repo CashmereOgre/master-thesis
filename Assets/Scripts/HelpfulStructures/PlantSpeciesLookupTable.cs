@@ -14,12 +14,13 @@ namespace Assets.Scripts.HelpfulStructures
                 {
                     maxAge = 950f,
                     gp = 0.12f,
-                    tropismMature = 0.2f,
+                    tropism = 0.2f,
                     apicalControl = 0.5f,
-                    vigorMax = 900f,
-                    vigorMin = 0.5f,
+                    vigorMax = 45000f, // 900 * 50
+                    vigorMin = 5f,
                     g1 = 0.2f,
                     g2 = 0.5f, // self-made parameter
+                    w2 = 0.14f,
                     scalingCoefficientBeta = 1.29f
                 }
             }
