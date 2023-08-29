@@ -177,15 +177,32 @@ public class Branch: MonoBehaviour
         }
 
         float apicalControl = terminalNode.plantVariables.apicalControl;
-        float vigorToMain = vigorObtained * ((apicalControl * mainChildBranch.lightExposure) /
-            ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
-        float vigorToLateral = vigorObtained - vigorToMain;
+        float vigorToMain;
+        float vigorToLateral;
+
+        if (lateralBranchesLightExposureSum <= 0)
+        {
+            vigorToMain = vigorObtained;
+            vigorToLateral = 0;
+        }
+        else
+        {
+            vigorToMain = vigorObtained * ((apicalControl * mainChildBranch.lightExposure) /
+                ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
+            vigorToLateral = vigorObtained - vigorToMain;
+        }
 
         foreach (Branch childBranch in childBranches)
         {
             if(childBranch.terminalNode.isMain)
             {
                 mainChildBranch.distributeVigor(vigorToMain);
+                continue;
+            }
+
+            if(vigorToLateral == 0)
+            {
+                childBranch.distributeVigor(0);
                 continue;
             }
 

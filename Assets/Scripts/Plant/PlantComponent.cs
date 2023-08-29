@@ -12,8 +12,13 @@ public class PlantComponent : MonoBehaviour
 
     public Raycaster raycaster;
 
+    private int squareHeight = 200;
+    private int squareDimension = 30;
+    private int sideDensity = 100;
+
     void Start()
     {
+        raycaster.setRaysSquare(squareDimension, sideDensity, squareHeight);
         initializePlant();
     }
 
@@ -74,7 +79,7 @@ public class PlantComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare(100, 50);
+        RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare();
 
         plant.totalLightExposure = plant.trunk.calculateLightExposure();
 

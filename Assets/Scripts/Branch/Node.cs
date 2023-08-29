@@ -75,6 +75,9 @@ public class Node : MonoBehaviour
 
             position += tropismOffset * branchLength;
 
+            if (float.IsNaN(position.x))
+                Debug.LogWarning("NaN");
+
             nodeGameObject.transform.localPosition = position;
 
             branchLineRenderer.SetPositions(new Vector3[2] { nodeGameObject.transform.position, parentNode.nodeGameObject.transform.position });
