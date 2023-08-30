@@ -8,6 +8,7 @@ public class Plant
     public Vector3 position { get; private set; }
     public PlantSpecies plantSpecies { get; private set; }
     public float totalLightExposure { get; set; }
+    public float age { get; set; }
 
     public Plant(Branch _trunk)
     {
@@ -15,5 +16,6 @@ public class Plant
         position = Vector3.zero;
         plantSpecies = _trunk.rootNode.plantVariables;
         totalLightExposure = 0;
+        age = 0;
     }
 }

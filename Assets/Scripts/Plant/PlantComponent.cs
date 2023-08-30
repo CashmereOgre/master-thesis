@@ -82,9 +82,23 @@ public class PlantComponent : MonoBehaviour
         RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare();
 
         plant.totalLightExposure = plant.trunk.calculateLightExposure();
+        //add full tree decay if vigor < vigorMin
+        plant.age += 2f;
 
-        float vigor = plant.totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
+        float vigor = setTreeVigor(plant.totalLightExposure, 1f);
         plant.trunk.distributeVigor(vigor);
         plant.trunk.GrowBranch(1000f); //approx. month in seconds
+    }
+
+    private float setTreeVigor(float totalLightExposure, float vigorDecreaseStep)
+    {
+        if (plant.age >= plant.plantSpecies.maxAge)
+        {
+            plant.plantSpecies.vigorMax -= vigorDecreaseStep;
+            Debug.Log($"{plant.plantSpecies.vigorMax}, {plant.trunk.childBranches[0].terminalNode.plantVariables.vigorMax}, {PlantSpeciesLookupTable.plantSpeciesDictionary[0].vigorMax}");
+            //decreases plant.plantSpecies.vigorMax, plant.trunk.childBranches[0].terminalNode.plantVariables.vigorMax, that's ok, but it can't decrease vigorMax in dictionary
+        }
+
+        return totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
     }
 }
