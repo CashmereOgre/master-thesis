@@ -17,7 +17,7 @@ namespace Assets.Scripts.HelpfulStructures
                     tropism = 0.2f,
                     apicalControl = 0.5f,
                     vigorMax = 900f,
-                    vigorMin = 5f,
+                    vigorMin = 2f,
                     g1 = 0.2f,
                     g2 = 0.5f, // self-made parameter
                     w2 = 0.14f,

@@ -181,24 +181,31 @@ public class Branch: MonoBehaviour
         }
 
         float apicalControl = terminalNode.plantVariables.apicalControl;
-        float vigorToMain;
-        float vigorToLateral;
+        float vigorToMain = 0;
+        float vigorToLateral = 0;
 
         if (mainChildBranch == null)
         {
-            vigorToMain = 0;
-            vigorToLateral = vigorObtained;
-        }
-        else if (lateralBranchesLightExposureSum <= 0)
-        {
-            vigorToMain = vigorObtained;
-            vigorToLateral = 0;
+            if (lateralBranchesLightExposureSum > 0)
+            {
+                vigorToLateral = vigorObtained;
+            }
         }
         else
         {
-            vigorToMain = vigorObtained * ((apicalControl * mainChildBranch.lightExposure) /
-                ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
-            vigorToLateral = vigorObtained - vigorToMain;
+            if (lateralBranchesLightExposureSum <= 0)
+            {
+                if (mainChildBranch.lightExposure > 0)
+                {
+                    vigorToMain = vigorObtained;
+                }
+            }
+            else
+            {
+                vigorToMain = vigorObtained * ((apicalControl * mainChildBranch.lightExposure) /
+                    ((apicalControl * mainChildBranch.lightExposure) + ((1 - apicalControl) * lateralBranchesLightExposureSum)));
+                vigorToLateral = vigorObtained - vigorToMain;
+            }
         }
 
 
@@ -217,14 +224,23 @@ public class Branch: MonoBehaviour
                 continue;
             }
 
-            if(vigorToLateral < vigorMin)
+            float childBranchLightExposure = branchesLightExposure.GetValueOrDefault(childBranch.terminalNode.id);
+            float childBranchVigor;
+
+            if (lateralBranchesLightExposureSum <= 0)
+            {
+                childBranchVigor = 0;
+            }
+            else
+            {
+                childBranchVigor = vigorToLateral * (childBranchLightExposure / lateralBranchesLightExposureSum);
+            }
+
+            if (childBranchVigor < vigorMin)
             {
                 destroyChildBranch(childBranch);
                 continue;
             }
-
-            float childBranchLightExposure = branchesLightExposure.GetValueOrDefault(childBranch.terminalNode.id);
-            float childBranchVigor = vigorToLateral * (childBranchLightExposure / lateralBranchesLightExposureSum);
 
             childBranch.distributeVigor(childBranchVigor);
         }
