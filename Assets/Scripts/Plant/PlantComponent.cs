@@ -37,7 +37,6 @@ public class PlantComponent : MonoBehaviour
         rootNode.age = rootNodePrototype.age;
         rootNode.physiologicalAge = rootNodePrototype.physiologicalAge;
         rootNode.maxLength = rootNodePrototype.maxLength;
-        rootNode.plantVariables = rootNodePrototype.plantVariables;
         rootNode.parentNodeId = rootNodePrototype.parentNodeId;
         rootNode.childNodeIds = rootNodePrototype.childNodeIds;
         rootNode.nodeGameObject.transform.localRotation = rootNode.rotation;
@@ -56,7 +55,6 @@ public class PlantComponent : MonoBehaviour
         terminalNode.age = terminalNodePrototype.age;
         terminalNode.physiologicalAge = terminalNodePrototype.physiologicalAge;
         terminalNode.maxLength = terminalNodePrototype.maxLength;
-        terminalNode.plantVariables = terminalNodePrototype.plantVariables;
         terminalNode.parentNodeId = terminalNodePrototype.parentNodeId;
         terminalNode.childNodeIds = terminalNodePrototype.childNodeIds;
         terminalNode.nodeGameObject.transform.rotation = terminalNode.rotation;
@@ -74,20 +72,35 @@ public class PlantComponent : MonoBehaviour
 
         trunk.capsuleCollider = trunk.setCapsuleCollider();
 
-        plant = new Plant(trunk);
+        PlantSpecies plantSpecimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0));
+
+        plant = new Plant(trunk, plantSpecimen);
+
+        rootNode.plant = plant;
+        terminalNode.plant = plant;
     }
 
     private void FixedUpdate()
     {
-        RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare();
+        if (plant != null)
+        {
+            RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.CastRaysSquare();
 
-        plant.totalLightExposure = plant.trunk.calculateLightExposure();
-        //add full tree decay if vigor < vigorMin
-        plant.age += 2f;
+            plant.totalLightExposure = plant.trunk.calculateLightExposure();
+            //add full tree decay if vigor < vigorMin
+            plant.age += 1f;
 
-        float vigor = setTreeVigor(plant.totalLightExposure, 1f);
-        plant.trunk.distributeVigor(vigor);
-        plant.trunk.GrowBranch(1000f); //approx. month in seconds
+            float vigor = setTreeVigor(plant.totalLightExposure, 1f);
+
+            if (vigor <= plant.plantSpecies.vigorMin)
+            {
+                destroyTree(plant);
+                return;
+            }
+
+            plant.trunk.distributeVigor(vigor);
+            plant.trunk.GrowBranch(1000f);
+        }
     }
 
     private float setTreeVigor(float totalLightExposure, float vigorDecreaseStep)
@@ -95,10 +108,15 @@ public class PlantComponent : MonoBehaviour
         if (plant.age >= plant.plantSpecies.maxAge)
         {
             plant.plantSpecies.vigorMax -= vigorDecreaseStep;
-            Debug.Log($"{plant.plantSpecies.vigorMax}, {plant.trunk.childBranches[0].terminalNode.plantVariables.vigorMax}, {PlantSpeciesLookupTable.plantSpeciesDictionary[0].vigorMax}");
-            //decreases plant.plantSpecies.vigorMax, plant.trunk.childBranches[0].terminalNode.plantVariables.vigorMax, that's ok, but it can't decrease vigorMax in dictionary
         }
 
         return totalLightExposure <= plant.plantSpecies.vigorMax ? plant.totalLightExposure : plant.plantSpecies.vigorMax;
+    }
+
+    private void destroyTree(Plant plant)
+    {
+        Destroy(plant.trunk.terminalNode.gameObject);
+        Destroy(plant.trunk.rootNode.gameObject);
+        Destroy(this);
     }
 }

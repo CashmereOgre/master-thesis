@@ -23,4 +23,20 @@ public class PlantSpecies
     //public float tropismAngleAlfa { get; set; }
 
     //Commented are not needed at that moment
+
+    public PlantSpecies(PlantSpecies plantSpecies)
+    {
+        maxAge = plantSpecies.maxAge;
+        gp = plantSpecies.gp;
+        tropism = plantSpecies.tropism;
+        apicalControl = plantSpecies.apicalControl;
+        vigorMax = plantSpecies.vigorMax;
+        vigorMin = plantSpecies.vigorMin;
+        g1 = plantSpecies.g1;
+        g2 = plantSpecies.g2;
+        w2 = plantSpecies.w2;
+        scalingCoefficientBeta = plantSpecies.scalingCoefficientBeta;
+    }
+
+    public PlantSpecies() {}
 }

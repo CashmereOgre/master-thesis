@@ -10,11 +10,11 @@ public class Plant
     public float totalLightExposure { get; set; }
     public float age { get; set; }
 
-    public Plant(Branch _trunk)
+    public Plant(Branch _trunk, PlantSpecies plantSpecimen)
     {
         trunk = _trunk;
         position = Vector3.zero;
-        plantSpecies = _trunk.rootNode.plantVariables;
+        plantSpecies = plantSpecimen;
         totalLightExposure = 0;
         age = 0;
     }

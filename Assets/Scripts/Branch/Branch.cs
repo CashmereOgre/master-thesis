@@ -30,7 +30,7 @@ public class Branch: MonoBehaviour
         if (stop)
             return;
 
-        if(prototype != null)
+        if (prototype != null)
         {
             terminalNode.age += ageStep;
 
@@ -60,20 +60,20 @@ public class Branch: MonoBehaviour
                 return;
             }
 
-            if (vigor > terminalNode.plantVariables.vigorMin)
+            if (vigor > terminalNode.plant.plantSpecies.vigorMin)
             {
                 foreach (Node prototypeTerminalNode in prototype.terminalNodes)
                 {
                     int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
 
-                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode);
+                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode, terminalNode.plant);
                     childBranches.Add(childBranch);
                 }
             }
         }
     }
 
-    private Branch AttachBranch(int rootNodeId, int newNodeId, Node branchPrototypeTerminalNode)
+    private Branch AttachBranch(int rootNodeId, int newNodeId, Node branchPrototypeTerminalNode, Plant plant)
     {
         Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId);
 
@@ -87,7 +87,7 @@ public class Branch: MonoBehaviour
         newNode.age = branchPrototypeTerminalNode.age;
         newNode.physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         newNode.maxLength = branchPrototypeTerminalNode.maxLength;
-        newNode.plantVariables = branchPrototypeTerminalNode.plantVariables;
+        newNode.plant = plant;
         newNode.parentNodeId = rootNodeId;  
         newNode.childNodeIds = branchPrototypeTerminalNode.childNodeIds;
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
@@ -180,7 +180,7 @@ public class Branch: MonoBehaviour
             lateralBranchesLightExposureSum += lateralBranch.Value;
         }
 
-        float apicalControl = terminalNode.plantVariables.apicalControl;
+        float apicalControl = terminalNode.plant.plantSpecies.apicalControl;
         float vigorToMain = 0;
         float vigorToLateral = 0;
 
@@ -211,7 +211,7 @@ public class Branch: MonoBehaviour
 
         foreach (Branch childBranch in childBranches.ToList())
         {
-            float vigorMin = childBranch.terminalNode.plantVariables.vigorMin;
+            float vigorMin = childBranch.terminalNode.plant.plantSpecies.vigorMin;
 
             if (childBranch.terminalNode.isMain)
             {
@@ -248,11 +248,11 @@ public class Branch: MonoBehaviour
 
     private float getGrowthRate()
     {
-        float vigorMin = terminalNode.plantVariables.vigorMin;
-        float vigorMax = terminalNode.plantVariables.vigorMax;
+        float vigorMin = terminalNode.plant.plantSpecies.vigorMin;
+        float vigorMax = terminalNode.plant.plantSpecies.vigorMax;
         float x = (vigor - vigorMin) / (vigorMax - vigorMin);
 
-        return (3 * Mathf.Pow(x, 2) - 2 * Mathf.Pow(x, 3)) * terminalNode.plantVariables.gp;
+        return (3 * Mathf.Pow(x, 2) - 2 * Mathf.Pow(x, 3)) * terminalNode.plant.plantSpecies.gp;
     }
 
     private float getPhysiologicalAge(float timeStep)

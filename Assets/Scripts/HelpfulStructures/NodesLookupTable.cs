@@ -27,7 +27,6 @@ public static class NodesLookupTable
                     age = 0f,
                     physiologicalAge = 0f,
                     maxLength = 0f,
-                    plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                     parentNodeId = 0,
                     childNodeIds = new List<int>{ 1 },
                     nodeGameObject = nodePrefab
@@ -43,7 +42,6 @@ public static class NodesLookupTable
                     age = 0f,
                     physiologicalAge = 0f,
                     maxLength = 50f,
-                    plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                     parentNodeId = 0,
                     childNodeIds = new List<int>{ 2, 3 },
                     nodeGameObject = nodePrefab
@@ -59,7 +57,6 @@ public static class NodesLookupTable
                     age = 0f,
                     physiologicalAge = 0f,
                     maxLength = 40f,
-                    plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                     parentNodeId = 1,
                     childNodeIds = new List<int>(),
                     nodeGameObject = nodePrefab
@@ -75,7 +72,6 @@ public static class NodesLookupTable
                     age = 0f,
                     physiologicalAge = 0f,
                     maxLength = 90f,
-                    plantVariables = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0),
                     parentNodeId = 1,
                     childNodeIds = new List<int>(),
                     nodeGameObject = nodePrefab

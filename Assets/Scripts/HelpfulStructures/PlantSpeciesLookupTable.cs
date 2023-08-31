@@ -10,7 +10,7 @@ namespace Assets.Scripts.HelpfulStructures
     {
         public static Dictionary<int, PlantSpecies> plantSpeciesDictionary = new Dictionary<int, PlantSpecies>()
         {
-            { 0, new PlantSpecies
+            { 0, new PlantSpecies()
                 {
                     maxAge = 950f,
                     gp = 0.12f,

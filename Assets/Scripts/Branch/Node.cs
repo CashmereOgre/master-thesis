@@ -13,7 +13,7 @@ public class Node : MonoBehaviour
     public float age { get; set; }
     public float physiologicalAge { get; set; }
     public float maxLength { get; set; }
-    public PlantSpecies plantVariables { get; set; }
+    public Plant plant { get; set; }
     public int parentNodeId { get; set; }
     public List<int> childNodeIds { get; set; }
 
@@ -35,7 +35,7 @@ public class Node : MonoBehaviour
         age = branchPrototypeTerminalNode.age;
         physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         maxLength = branchPrototypeTerminalNode.maxLength;
-        plantVariables = branchPrototypeTerminalNode.plantVariables;
+        plant = null;
         parentNodeId = 0;
         childNodeIds = new List<int>();
         nodeGameObject = branchPrototypeTerminalNode.nodeGameObject;
@@ -53,7 +53,7 @@ public class Node : MonoBehaviour
     {
         physiologicalAge = physAge;
 
-        float branchLength = Math.Min(maxLength, physiologicalAge * plantVariables.scalingCoefficientBeta);
+        float branchLength = Math.Min(maxLength, physiologicalAge * plant.plantSpecies.scalingCoefficientBeta);
 
         if (branchLength != maxLength)
         {
@@ -64,8 +64,8 @@ public class Node : MonoBehaviour
 
             position = Vector3.zero + branchVector;
 
-            float g1 = plantVariables.g1;
-            float g2 = plantVariables.g2;
+            float g1 = plant.plantSpecies.g1;
+            float g2 = plant.plantSpecies.g2;
             Vector3 gravityDirection = new Vector3(0.0f, -1.0f, 0.0f);
 
             Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (physiologicalAge + g1);
