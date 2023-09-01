@@ -22,6 +22,7 @@ public class Branch: MonoBehaviour
     private bool stop = false;
 
     private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
+    private Dictionary<string, Vector3> collisionsDictionary = new Dictionary<string, Vector3>();
 
     private float vigor = 0;
 
@@ -171,7 +172,6 @@ public class Branch: MonoBehaviour
         }
 
         Branch mainChildBranch = getMainChildBranch();
-        //fix abnormal branch behaviour if light exposure is 0
         Dictionary<int, float> branchesLightExposure = getLateralBranchesLightExposure();
         float lateralBranchesLightExposureSum = 0;
 
@@ -299,6 +299,56 @@ public class Branch: MonoBehaviour
     {
         childBranches.Remove(childBranch);
         Destroy(childBranch.terminalNode.gameObject);
+    }
+
+    private Vector3 getBranchOrientation(Quaternion startingRotation)
+    {
+        Vector3 startingRotationEuler = startingRotation.eulerAngles;
+        float alpha = 0.1f;
+
+
+    }
+
+    private float fDistribution()
+    {
+        return terminalNode.plant.plantSpecies.w1 * fCollisions(collisionsDictionary) + terminalNode.plant.plantSpecies.w2 * fTropism();
+    }
+
+    private float fCollisions(Dictionary<string, Vector3> collisionPoints)
+    {
+        float fCollisions = 0;
+
+        foreach (KeyValuePair<string, Vector3> collisionPoint in collisionPoints)
+        {
+            fCollisions += Vector3.Distance(collisionPoint.Value, terminalNode.nodeGameObject.transform.position);
+        }
+
+        return fCollisions;
+    }
+
+    private float fTropism()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        ContactPoint[] contactPoints = new ContactPoint[20];
+        int contactPointsCount = collision.GetContacts(contactPoints);
+
+        for (int i = 0; i < contactPointsCount; i++)
+        {
+            string collidingObjectName = contactPoints[i].thisCollider.gameObject.name;
+
+            if (collisionsDictionary.ContainsKey(collidingObjectName))
+            {
+                collisionsDictionary[collidingObjectName] = contactPoints[i].point;
+                continue;
+            }
+
+            collisionsDictionary.Add(collidingObjectName, contactPoints[i].point);
+
+        }
     }
 
     //private void OnCollisionStay(Collision collision)

@@ -73,7 +73,8 @@ public class Node : MonoBehaviour
             if (float.IsNaN(tropismOffset.x))
                 Debug.LogWarning("NaN");
 
-            position += tropismOffset * branchLength;
+            position = position.normalized * branchLength;
+            position += tropismOffset;
 
             if (float.IsNaN(position.x))
                 Debug.LogWarning("NaN");

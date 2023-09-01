@@ -15,6 +15,7 @@ public class PlantSpecies
     //public float determinismMature { get; set; }
     public float g1 { get; set; }
 	public float g2 { get; set; }   /// Tropism strength overall
+    public float w1 { get; set; }
     public float w2 { get; set; }
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
     //public float optimalTemperature { get; set; }
@@ -34,6 +35,7 @@ public class PlantSpecies
         vigorMin = plantSpecies.vigorMin;
         g1 = plantSpecies.g1;
         g2 = plantSpecies.g2;
+        w1 = plantSpecies.w1;
         w2 = plantSpecies.w2;
         scalingCoefficientBeta = plantSpecies.scalingCoefficientBeta;
     }
