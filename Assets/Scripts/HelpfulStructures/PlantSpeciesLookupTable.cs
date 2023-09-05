@@ -22,7 +22,8 @@ namespace Assets.Scripts.HelpfulStructures
                     g2 = 0.5f, // self-made parameter
                     w1 = 0.5f,
                     w2 = 0.14f,
-                    scalingCoefficientBeta = 1.29f
+                    scalingCoefficientBeta = 1.29f,
+                    alphaTropism = 0.66f
                 }
             }
         };

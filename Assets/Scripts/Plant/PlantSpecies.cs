@@ -18,10 +18,10 @@ public class PlantSpecies
     public float w1 { get; set; }
     public float w2 { get; set; }
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
+    public float alphaTropism { get; set; }
     //public float optimalTemperature { get; set; }
     //public float optimalPrecipitation { get; set; }
     //public float floweringAge { get; set; }
-    //public float tropismAngleAlfa { get; set; }
 
     //Commented are not needed at that moment
 
@@ -38,6 +38,7 @@ public class PlantSpecies
         w1 = plantSpecies.w1;
         w2 = plantSpecies.w2;
         scalingCoefficientBeta = plantSpecies.scalingCoefficientBeta;
+        alphaTropism = plantSpecies.alphaTropism;
     }
 
     public PlantSpecies() {}

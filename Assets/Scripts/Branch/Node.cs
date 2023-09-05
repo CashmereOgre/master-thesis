@@ -49,7 +49,7 @@ public class Node : MonoBehaviour
         return Instantiate(nodeGameObject, parentObjectTransform);
     }
 
-    public GameObject growNode(float physAge)
+    public GameObject growNode(float physAge, Quaternion optimisedNodeOrientation)
     {
         physiologicalAge = physAge;
 
@@ -60,7 +60,7 @@ public class Node : MonoBehaviour
             // Debug.Log($"id: {id}, position: {position}, age: {age}, parent node id: {parentNodeId}, child node ids: {childNodeIds}");
             // rotation is applied according to prototype and other calculations when node is created
             Vector3 branchVector = new Vector3(0.0f, branchLength, 0.0f);
-            branchVector = rotation * branchVector;
+            branchVector = optimisedNodeOrientation * branchVector;
 
             position = Vector3.zero + branchVector;
 

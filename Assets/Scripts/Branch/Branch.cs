@@ -48,7 +48,8 @@ public class Branch: MonoBehaviour
             if (terminalNode.physiologicalAge < prototype.maturityAge)
             {
                 float physiologicalAge = getPhysiologicalAge(ageStep);
-                terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge);
+                Quaternion optimisedBranchOrientation = getOptimisedBranchOrientation(terminalNode.rotation, terminalNode.plant.plantSpecies.alphaTropism);
+                terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge, optimisedBranchOrientation);
                 return;
             }
 
@@ -301,17 +302,46 @@ public class Branch: MonoBehaviour
         Destroy(childBranch.terminalNode.gameObject);
     }
 
-    private Vector3 getBranchOrientation(Quaternion startingRotation)
+    private Quaternion getOptimisedBranchOrientation(Quaternion startingRotation, float alphaTropism)
     {
         Vector3 startingRotationEuler = startingRotation.eulerAngles;
-        float alpha = 0.1f;
+        float alpha = 5f;
 
-
+        return optimize(startingRotationEuler, alpha, alphaTropism);
     }
 
-    private float fDistribution()
+    private Quaternion optimize(Vector3 rotation, float alpha, float alphaTropism)
     {
-        return terminalNode.plant.plantSpecies.w1 * fCollisions(collisionsDictionary) + terminalNode.plant.plantSpecies.w2 * fTropism();
+        float minQuality = float.MaxValue;
+        Vector3 optimalAngle = rotation;
+
+        Vector3[] optimisationAngles = new Vector3[]
+        {
+            new Vector3(0f, 0f, 0f),
+            new Vector3(alpha, 0f, 0f),
+            new Vector3(-alpha, 0f, 0f),
+            new Vector3(0f, 0f, alpha),
+            new Vector3(0f, 0f, -alpha)
+        };
+
+        foreach(Vector3 optimisationAngle in optimisationAngles)
+        {
+            Vector3 newAngle = rotation + optimisationAngle;
+            float quality = fDistribution(alphaTropism, Quaternion.Euler(newAngle));
+
+            if(quality < minQuality)
+            {
+                minQuality = quality;
+                optimalAngle = newAngle;
+            }
+        }
+
+        return Quaternion.Euler(optimalAngle);
+    }
+
+    private float fDistribution(float alphaTropism, Quaternion alpha)
+    {
+        return terminalNode.plant.plantSpecies.w1 * fCollisions(collisionsDictionary) + terminalNode.plant.plantSpecies.w2 * fTropism(alphaTropism, alpha);
     }
 
     private float fCollisions(Dictionary<string, Vector3> collisionPoints)
@@ -326,9 +356,13 @@ public class Branch: MonoBehaviour
         return fCollisions;
     }
 
-    private float fTropism()
+    private float fTropism(float alphaTropism, Quaternion alpha)
     {
-        throw new NotImplementedException();
+        Matrix4x4 rotationMatrix = Matrix4x4.Rotate(alpha);
+        float cosAlpha = rotationMatrix.m00 + rotationMatrix.m11 + rotationMatrix.m22;
+        float cosAlphaTropism = Mathf.Cos(alphaTropism);
+
+        return Mathf.Abs(cosAlphaTropism - cosAlpha);
     }
 
     private void OnCollisionStay(Collision collision)
@@ -350,40 +384,4 @@ public class Branch: MonoBehaviour
 
         }
     }
-
-    //private void OnCollisionStay(Collision collision)
-    //{
-    //    if (boundingSphere != null)
-    //    {
-    //        if (collision.collider.gameObject.name == "Root" || collision.collider.gameObject.name == "Trunk")
-    //            return;
-
-    //        int collidingObjectId = int.Parse(collision.collider.gameObject.name);
-
-    //        if (childBranchesTerminalNodesIdsAndRootPositions.ContainsKey(collidingObjectId))
-    //            return;
-
-    //        SphereCollider collider = collision.collider.GetComponent<SphereCollider>();
-    //        float r1 = boundingSphere.radius;
-    //        float r2 = collider.radius;
-    //        Vector3 boundingSphereCenter = boundingSphere.bounds.center;
-    //        Vector3 colliderCenter = collision.collider.gameObject.transform.TransformPoint(collider.center);
-
-    //        float distance = Vector3.Distance(boundingSphereCenter, colliderCenter);
-
-    //        if (distance == 0)
-    //            return;
-
-    //        float term1 = Mathf.Pow(r1 + r2 - distance, 2);
-    //        float term2 = distance * distance + 2 * distance * r2 - 3 * r2 * r2 + 2 * distance * r1 + 6 * r1 * r2 - 3 * r1 * r1;
-    //        float volumeOfIntersection = Mathf.PI * term1 * term2 / (12 * distance);
-
-    //        if (volumeOfIntersection < 0)
-    //            return;
-
-    //        collidersDictionary[collidingObjectId] = new CollisionInfo(volumeOfIntersection, colliderCenter, r2, distance);
-
-    //        //Debug.Log($"Current object id: {boundingSphere}, colliding object id: {collidingObjectId}, volume: {volumeOfIntersection}");
-    //    }
-    //}
 }
