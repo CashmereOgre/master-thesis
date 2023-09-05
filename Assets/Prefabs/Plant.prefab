@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28079eda55a256142b62bd9f74258ae0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plantPrefab: {fileID: 8165531413994236120}
+  plantGameObject: {fileID: 8165531413994236120}

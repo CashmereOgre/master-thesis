@@ -23,9 +23,10 @@ public class Plant: MonoBehaviour
         age = 0;
     }
 
-    public GameObject instantiatePlant()
+    public GameObject instantiatePlant(GameObject plantPrefab)
     {
-        return Instantiate(plantGameObject);
+        plantGameObject = Instantiate(plantPrefab);
+        return plantGameObject;
     }
 
     public void initializePlant()
