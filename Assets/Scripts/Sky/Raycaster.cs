@@ -24,7 +24,7 @@ public class Raycaster : MonoBehaviour
         }
     }
 
-    public Dictionary<string, int> CastRaysSquare()
+    public Dictionary<string, int> castRaysSquare()
     {
         Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
 
@@ -46,7 +46,7 @@ public class Raycaster : MonoBehaviour
         return objectRayCountsDictionary;
     }
 
-    //public Dictionary<string, int> CastRaysSquare(int squareDimension, float squareHeight)
+    //public Dictionary<string, int> castRaysSquare(int squareDimension, float squareHeight)
     //{
     //    float startingCorner = -(squareDimension / 2);
     //    Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();

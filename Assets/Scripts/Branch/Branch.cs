@@ -93,7 +93,7 @@ public class Branch: MonoBehaviour
         newNode.parentNodeId = rootNodeId;  
         newNode.childNodeIds = branchPrototypeTerminalNode.childNodeIds;
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
-        newNode.nodeGameObject.name = newNode.id.ToString();
+        newNode.nodeGameObject.name = $"{plant.id}.{newNode.id}";
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
 
