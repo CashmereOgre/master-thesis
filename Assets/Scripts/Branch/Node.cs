@@ -6,6 +6,7 @@ using System;
 public class Node : MonoBehaviour
 {
     public int id { get; set; }
+    public new string name { get; set; }
     public bool isRoot { get; set; }
     public bool isMain { get; set; }
     public Vector3 position { get; set; }
@@ -15,6 +16,7 @@ public class Node : MonoBehaviour
     public float maxLength { get; set; }
     public Plant plant { get; set; }
     public int parentNodeId { get; set; }
+    public string parentNodeName { get; set; }
     public List<int> childNodeIds { get; set; }
 
     public GameObject nodeGameObject;
@@ -28,6 +30,7 @@ public class Node : MonoBehaviour
     public Node(Node branchPrototypeTerminalNode)
     {
         id = branchPrototypeTerminalNode.id;
+        name = branchPrototypeTerminalNode.name;
         isRoot = branchPrototypeTerminalNode.isRoot;
         isMain = branchPrototypeTerminalNode.isMain;
         position = branchPrototypeTerminalNode.position;
@@ -37,6 +40,7 @@ public class Node : MonoBehaviour
         maxLength = branchPrototypeTerminalNode.maxLength;
         plant = null;
         parentNodeId = 0;
+        parentNodeName = "0.0";
         childNodeIds = new List<int>();
         nodeGameObject = branchPrototypeTerminalNode.nodeGameObject;
     }
@@ -92,7 +96,7 @@ public class Node : MonoBehaviour
         var lineRenderer = nodeGameObject.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
 
-        parentNode = new Node(NodesLookupTable.nodesDictionary[parentNodeId]); 
+        parentNode = new Node(NodesLookupTable.nodesDictionary[parentNodeName]); 
 
         return lineRenderer;
     }

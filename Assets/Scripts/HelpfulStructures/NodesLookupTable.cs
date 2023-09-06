@@ -9,7 +9,7 @@ public static class NodesLookupTable
 
     public static Dictionary<int, Node> nodesDictionaryForBranchPrototypes = new Dictionary<int, Node>();
 
-    public static Dictionary<int, Node> nodesDictionary = new Dictionary<int, Node>();
+    public static Dictionary<string, Node> nodesDictionary = new Dictionary<string, Node>();
 
     public static void Setup(GameObject prefab)
     {

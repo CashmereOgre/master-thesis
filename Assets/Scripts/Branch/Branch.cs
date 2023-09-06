@@ -21,7 +21,7 @@ public class Branch: MonoBehaviour
 
     private bool stop = false;
 
-    private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
+    //private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
     private Dictionary<string, Vector3> collisionsDictionary = new Dictionary<string, Vector3>();
 
     private float vigor = 0;
@@ -39,7 +39,7 @@ public class Branch: MonoBehaviour
             //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
             //bool decay = rootNode.age >= prototype.maturityAge;
 
-            childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
+            //childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
 
             capsuleCollider = updateCapsuleColliderDimensions();
 
@@ -66,23 +66,26 @@ public class Branch: MonoBehaviour
             {
                 foreach (Node prototypeTerminalNode in prototype.terminalNodes)
                 {
-                    int lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+                    string lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
+                    string[] split = lookupTableLastKey.Split('.');
+                    int newNodeId = int.Parse(split[1]) + 1;
 
-                    Branch childBranch = AttachBranch(terminalNode.id, lookupTableLastKey + 1, prototypeTerminalNode, terminalNode.plant);
+                    Branch childBranch = AttachBranch(terminalNode.nodeGameObject.name, newNodeId, prototypeTerminalNode, terminalNode.plant);
                     childBranches.Add(childBranch);
                 }
             }
         }
     }
 
-    private Branch AttachBranch(int rootNodeId, int newNodeId, Node branchPrototypeTerminalNode, Plant plant)
+    private Branch AttachBranch(string rootNodeName, int newNodeId, Node branchPrototypeTerminalNode, Plant plant)
     {
-        Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeId);
+        Node newBranchRootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNodeName);
 
         Node newNode = new Node(branchPrototypeTerminalNode);
         newNode.nodeGameObject = newNode.instantiateNode(newBranchRootNode.nodeGameObject.transform);
         newNode = newNode.nodeGameObject.GetComponent<Node>();
         newNode.id = newNodeId;
+        newNode.name = $"{plant.id}.{newNode.id}";
         newNode.isMain = branchPrototypeTerminalNode.isMain;
         newNode.position = branchPrototypeTerminalNode.position;
         newNode.rotation = branchPrototypeTerminalNode.rotation;
@@ -90,19 +93,20 @@ public class Branch: MonoBehaviour
         newNode.physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         newNode.maxLength = branchPrototypeTerminalNode.maxLength;
         newNode.plant = plant;
-        newNode.parentNodeId = rootNodeId;  
+        newNode.parentNodeId = newBranchRootNode.id;
+        newNode.parentNodeName = rootNodeName;
         newNode.childNodeIds = branchPrototypeTerminalNode.childNodeIds;
         newNode.nodeGameObject.transform.localRotation = newNode.rotation;
-        newNode.nodeGameObject.name = $"{plant.id}.{newNode.id}";
+        newNode.nodeGameObject.name = newNode.name;
         newNode.branchLineRenderer = newNode.setBranchLineRenderer();
-        NodesLookupTable.nodesDictionary.Add(newNodeId, newNode);
+        NodesLookupTable.nodesDictionary.Add(newNode.name, newNode);
 
         Branch childBranch = newNode.nodeGameObject.GetComponent<Branch>();
         childBranch.prototype = BranchPrototypesInstances.basicBranchPrototype;
         childBranch.maxAge = maxAge; //set other maxAge, now is max age of whole tree
         childBranch.currentAge = 0.0f;
         childBranch.rootNode = newBranchRootNode;
-        childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNodeId); 
+        childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNode.name); 
         childBranch.childBranches = new List<Branch>();
 
         childBranch.capsuleCollider = childBranch.setCapsuleCollider();
@@ -117,21 +121,21 @@ public class Branch: MonoBehaviour
         return center;
     }
 
-    private Dictionary<int,Vector3> getAllInDepthChildBranchesPositions()
-    {
-        Dictionary<int, Vector3> result = new Dictionary<int, Vector3>();
-        if (childBranches.Any())
-        {
-            foreach (Branch child in childBranches)
-            {
-                result.AddRange(child.getAllInDepthChildBranchesPositions());
-            }
-        }
+    //private Dictionary<int,Vector3> getAllInDepthChildBranchesPositions()
+    //{
+    //    Dictionary<int, Vector3> result = new Dictionary<int, Vector3>();
+    //    if (childBranches.Any())
+    //    {
+    //        foreach (Branch child in childBranches)
+    //        {
+    //            result.AddRange(child.getAllInDepthChildBranchesPositions());
+    //        }
+    //    }
 
-        result.Add(terminalNode.id, terminalNode.nodeGameObject.transform.position);
+    //    result.Add(terminalNode.id, terminalNode.nodeGameObject.transform.position);
 
-        return result;
-    }
+    //    return result;
+    //}
 
     public CapsuleCollider setCapsuleCollider()
     {
