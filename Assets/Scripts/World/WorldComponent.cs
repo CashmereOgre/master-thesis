@@ -65,7 +65,7 @@ public class WorldComponent : MonoBehaviour
 
         foreach (Plant plant in plantsList)
         {
-            if(plant != null)
+            if(plant.trunk != null)
             {
                 plant.growPlant();
             }

@@ -35,8 +35,8 @@ public class Plant: MonoBehaviour
         Node rootNode = new Node(rootNodePrototype);
         rootNode.nodeGameObject = rootNode.instantiateNode(plantGameObject.transform);
         rootNode = rootNode.nodeGameObject.GetComponent<Node>();
-        rootNode.id = rootNodePrototype.id;
-        rootNode.name = $"{id}.root";
+        rootNode.id = 0;
+        rootNode.name = $"{id}.{rootNode.id}";
         rootNode.isMain = rootNodePrototype.isMain;
         rootNode.position = rootNodePrototype.position;
         rootNode.rotation = rootNodePrototype.rotation;
@@ -54,8 +54,8 @@ public class Plant: MonoBehaviour
         Node terminalNode = new Node(terminalNodePrototype);
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         terminalNode = terminalNode.nodeGameObject.GetComponent<Node>();
-        terminalNode.id = terminalNodePrototype.id;
-        terminalNode.name = $"{id}.trunk";
+        terminalNode.id = 1;
+        terminalNode.name = $"{id}.{terminalNode.id}";
         terminalNode.isMain = terminalNodePrototype.isMain;
         terminalNode.position = terminalNodePrototype.position;
         terminalNode.rotation = terminalNodePrototype.rotation;
@@ -117,6 +117,6 @@ public class Plant: MonoBehaviour
     {
         Destroy(trunk.terminalNode.gameObject);
         Destroy(trunk.rootNode.gameObject);
-        Destroy(this);
+        Destroy(plantGameObject);
     }
 }

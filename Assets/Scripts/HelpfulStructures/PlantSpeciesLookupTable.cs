@@ -12,11 +12,11 @@ namespace Assets.Scripts.HelpfulStructures
         {
             { 0, new PlantSpecies()
                 {
-                    maxAge = 950f,
+                    maxAge = 50f,
                     gp = 0.12f,
                     tropism = 0.2f,
                     apicalControl = 0.5f,
-                    vigorMax = 900f,
+                    vigorMax = 90f,
                     vigorMin = 2f,
                     g1 = 0.2f,
                     g2 = 0.5f, // self-made parameter
