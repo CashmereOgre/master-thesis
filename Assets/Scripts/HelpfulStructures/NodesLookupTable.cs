@@ -1,6 +1,7 @@
 using Assets.Scripts.HelpfulStructures;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class NodesLookupTable
@@ -78,5 +79,17 @@ public static class NodesLookupTable
                 }
             },
         };
+    }
+
+    public static int getIdOfLastNodeInPlant(int plantId)
+    {
+        var matchingKeys = nodesDictionary.Keys
+            .Where(key => key.StartsWith(plantId + "."))
+            .ToList();
+
+        string lastKey = matchingKeys.Last();
+        int lastNodeId = int.Parse(lastKey.Split(".")[1]);
+
+        return lastNodeId;
     }
 }

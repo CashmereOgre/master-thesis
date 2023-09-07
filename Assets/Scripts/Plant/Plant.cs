@@ -11,6 +11,7 @@ public class Plant: MonoBehaviour
     public PlantSpecies plantSpecies { get; private set; }
     public float totalLightExposure { get; set; }
     public float age { get; set; }
+    public float effectiveFloweringAge { get; set; }
 
     public GameObject plantGameObject;
 
@@ -21,6 +22,7 @@ public class Plant: MonoBehaviour
         plantSpecies = _plantSpecimen;
         totalLightExposure = 0;
         age = 0;
+        effectiveFloweringAge = _plantSpecimen.floweringAge;
     }
 
     public GameObject instantiatePlant(GameObject plantPrefab)
@@ -89,9 +91,12 @@ public class Plant: MonoBehaviour
     public void growPlant()
     {
         totalLightExposure = trunk.calculateLightExposure();
-        age += 1f;
+        age += 0.1f;
 
         float vigor = setVigor(totalLightExposure, 1f);
+
+        effectiveFloweringAge = plantSpecies.floweringAge * plantSpecies.vigorMax / vigor;
+        
 
         if (vigor <= plantSpecies.vigorMin)
         {
@@ -101,6 +106,17 @@ public class Plant: MonoBehaviour
 
         trunk.distributeVigor(vigor);
         trunk.GrowBranch(1000f);
+    }
+
+    public Vector3 getSeedPosition()
+    {
+        float randomX = Random.Range(-1.0f, 1.0f);
+        float randomZ = Random.Range(-1.0f, 1.0f);
+        float randomRange = Random.Range(0f, plantSpecies.seedingRadius);
+
+        Vector3 seedPosition = plantGameObject.transform.position + (new Vector3(randomX, 0, randomZ).normalized * randomRange);
+
+        return seedPosition;
     }
 
     private float setVigor(float totalLightExposure, float vigorDecreaseStep)

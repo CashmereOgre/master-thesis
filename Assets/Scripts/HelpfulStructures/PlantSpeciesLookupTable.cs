@@ -12,18 +12,22 @@ namespace Assets.Scripts.HelpfulStructures
         {
             { 0, new PlantSpecies()
                 {
-                    maxAge = 50f,
+                    id = 0,
+                    maxAge = 950f,
                     gp = 0.12f,
                     tropism = 0.2f,
                     apicalControl = 0.5f,
-                    vigorMax = 90f,
+                    vigorMax = 900f,
                     vigorMin = 2f,
                     g1 = 0.2f,
                     g2 = 0.5f, // self-made parameter
                     w1 = 0.5f,
                     w2 = 0.14f,
                     scalingCoefficientBeta = 1.29f,
-                    alphaTropism = 0.66f
+                    alphaTropism = 0.66f,
+                    floweringAge = 100f,
+                    seedsPerYear = 2,
+                    seedingRadius = 10,
                 }
             }
         };

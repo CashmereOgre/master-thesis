@@ -1,6 +1,8 @@
 using Assets.Scripts.HelpfulStructures;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.MaterialProperty;
 
@@ -43,31 +45,53 @@ public class WorldComponent : MonoBehaviour
         Vector3 plant1Position = new Vector3(0f, 0f, 0f);
         Plant plant1 = new Plant(plant1Specimen, plant1Position);
         plant1.plantGameObject = plant1.instantiatePlant(plantPrefab);
-        plant1.id = 1;
+        plant1.id = 0;
         plant1.plantGameObject.name = plant1.id.ToString();
         plant1.plantGameObject.transform.position = plant1Position;
 
-        PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0));
-        Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
-        Plant plant2 = new Plant(plant2Specimen, plant2Position);
-        plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
-        plant2.id = 2;
-        plant2.plantGameObject.name = plant2.id.ToString();
-        plant2.plantGameObject.transform.position = plant2Position;
+        //PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0));
+        //Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
+        //Plant plant2 = new Plant(plant2Specimen, plant2Position);
+        //plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
+        //plant2.id = 1;
+        //plant2.plantGameObject.name = plant2.id.ToString();
+        //plant2.plantGameObject.transform.position = plant2Position;
 
         plantsList.Add(plant1);
-        plantsList.Add(plant2);
+        //plantsList.Add(plant2);
+    }
+
+    private void addNewPlant(Vector3 position, Plant parent)
+    {
+        PlantSpecies plantSpecimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(parent.plantSpecies.id));
+        Plant plant = new Plant(plantSpecimen, position);
+        plant.plantGameObject = plant.instantiatePlant(plantPrefab);
+        plant.id = plantsList.Count;
+        plant.plantGameObject.name = plant.id.ToString();
+        plant.plantGameObject.transform.position = position;
+
+        plant.initializePlant();
+        plantsList.Add(plant);
     }
 
     private void FixedUpdate()
     {
         RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.castRaysSquare();
 
-        foreach (Plant plant in plantsList)
+        foreach (Plant plant in plantsList.ToList())
         {
             if(plant.trunk != null)
             {
                 plant.growPlant();
+
+                if (plant.age >= plant.effectiveFloweringAge)
+                {
+                    for (int i = 0; i < plant.plantSpecies.seedsPerYear; i++)
+                    {
+                        Vector3 newPlantPosition = plant.getSeedPosition();
+                        addNewPlant(newPlantPosition, plant);
+                    }
+                }
             }
         }
     }

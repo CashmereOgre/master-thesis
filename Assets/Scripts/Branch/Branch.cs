@@ -66,9 +66,7 @@ public class Branch: MonoBehaviour
             {
                 foreach (Node prototypeTerminalNode in prototype.terminalNodes)
                 {
-                    string lookupTableLastKey = NodesLookupTable.nodesDictionary.Last().Key;
-                    string[] split = lookupTableLastKey.Split('.');
-                    int newNodeId = int.Parse(split[1]) + 1;
+                    int newNodeId = NodesLookupTable.getIdOfLastNodeInPlant(terminalNode.plant.id) + 1;
 
                     Branch childBranch = AttachBranch(terminalNode.nodeGameObject.name, newNodeId, prototypeTerminalNode, terminalNode.plant);
                     childBranches.Add(childBranch);

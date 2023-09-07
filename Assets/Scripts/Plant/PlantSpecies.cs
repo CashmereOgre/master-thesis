@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlantSpecies
 {
+    public int id { get; set; }
     public float maxAge { get; set; } /// Max age
 	public float gp { get; set; }  /// Growth Rate
     //public float tropism { get; set; }
@@ -19,6 +20,9 @@ public class PlantSpecies
     public float w2 { get; set; }
     public float scalingCoefficientBeta { get; set; } /// Scaling Coefficient
     public float alphaTropism { get; set; }
+    public float floweringAge { get; set; }
+    public int seedsPerYear { get; set; }
+    public float seedingRadius { get; set; }
     //public float optimalTemperature { get; set; }
     //public float optimalPrecipitation { get; set; }
     //public float floweringAge { get; set; }
@@ -27,6 +31,7 @@ public class PlantSpecies
 
     public PlantSpecies(PlantSpecies plantSpecies)
     {
+        id = plantSpecies.id;
         maxAge = plantSpecies.maxAge;
         gp = plantSpecies.gp;
         tropism = plantSpecies.tropism;
@@ -39,6 +44,9 @@ public class PlantSpecies
         w2 = plantSpecies.w2;
         scalingCoefficientBeta = plantSpecies.scalingCoefficientBeta;
         alphaTropism = plantSpecies.alphaTropism;
+        floweringAge = plantSpecies.floweringAge;
+        seedsPerYear = plantSpecies.seedsPerYear;
+        seedingRadius = plantSpecies.seedingRadius;
     }
 
     public PlantSpecies() {}
