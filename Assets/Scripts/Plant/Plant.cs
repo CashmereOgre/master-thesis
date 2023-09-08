@@ -41,7 +41,7 @@ public class Plant: MonoBehaviour
         rootNode.name = $"{id}.{rootNode.id}";
         rootNode.isMain = rootNodePrototype.isMain;
         rootNode.position = rootNodePrototype.position;
-        rootNode.rotation = rootNodePrototype.rotation;
+        rootNode.rotation = getRandomPlantRotation();
         rootNode.age = rootNodePrototype.age;
         rootNode.physiologicalAge = rootNodePrototype.physiologicalAge;
         rootNode.maxLength = rootNodePrototype.maxLength;
@@ -67,7 +67,7 @@ public class Plant: MonoBehaviour
         terminalNode.parentNodeId = terminalNodePrototype.parentNodeId;
         terminalNode.parentNodeName = rootNode.name;
         terminalNode.childNodeIds = terminalNodePrototype.childNodeIds;
-        terminalNode.nodeGameObject.transform.rotation = terminalNode.rotation;
+        terminalNode.nodeGameObject.transform.localRotation = terminalNode.rotation;
         terminalNode.nodeGameObject.name = terminalNode.name;
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(terminalNode.nodeGameObject.name, terminalNode);
@@ -117,6 +117,14 @@ public class Plant: MonoBehaviour
         Vector3 seedPosition = plantGameObject.transform.position + (new Vector3(randomX, 0, randomZ).normalized * randomRange);
 
         return seedPosition;
+    }
+
+    private Quaternion getRandomPlantRotation()
+    {
+        float randomY = Random.Range(0, 360);
+        Vector3 rotationEuler = new Vector3(0, randomY, 0);
+
+        return Quaternion.Euler(rotationEuler);
     }
 
     private float setVigor(float totalLightExposure, float vigorDecreaseStep)

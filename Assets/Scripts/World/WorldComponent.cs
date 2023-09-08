@@ -84,7 +84,7 @@ public class WorldComponent : MonoBehaviour
             {
                 plant.growPlant();
 
-                if (plant.age >= plant.effectiveFloweringAge)
+                if (plant.age >= plant.effectiveFloweringAge && Mathf.Abs(plant.age - Mathf.Floor(plant.age + 0.01f)) <= 0.01)
                 {
                     for (int i = 0; i < plant.plantSpecies.seedsPerYear; i++)
                     {

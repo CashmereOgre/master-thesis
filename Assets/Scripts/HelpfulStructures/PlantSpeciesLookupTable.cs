@@ -25,7 +25,7 @@ namespace Assets.Scripts.HelpfulStructures
                     w2 = 0.14f,
                     scalingCoefficientBeta = 1.29f,
                     alphaTropism = 0.66f,
-                    floweringAge = 100f,
+                    floweringAge = 20f,
                     seedsPerYear = 2,
                     seedingRadius = 10,
                 }
