@@ -10,6 +10,7 @@ public class PlantSpecies
     //public float tropism { get; set; }
     public float tropism { get; set; }   /// Tropism decrease by age
     public float apicalControl { get; set; }
+    public float apicalControlMature { get; set; }
     public float vigorMax { get; set; }
     public float vigorMin { get; set; }
     //public float determinism { get; set; }
@@ -36,6 +37,7 @@ public class PlantSpecies
         gp = plantSpecies.gp;
         tropism = plantSpecies.tropism;
         apicalControl = plantSpecies.apicalControl;
+        apicalControlMature = plantSpecies.apicalControlMature;
         vigorMax = plantSpecies.vigorMax;
         vigorMin = plantSpecies.vigorMin;
         g1 = plantSpecies.g1;

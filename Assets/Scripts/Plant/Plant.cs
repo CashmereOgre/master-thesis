@@ -73,7 +73,7 @@ public class Plant: MonoBehaviour
         NodesLookupTable.nodesDictionary.Add(terminalNode.nodeGameObject.name, terminalNode);
 
         Branch trunk = terminalNode.nodeGameObject.GetComponent<Branch>();
-        trunk.prototype = BranchPrototypesInstances.basicBranchPrototype;
+        trunk.prototype = BranchPrototypesInstances.branchPrototype1;
         trunk.maxAge = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0).maxAge;
         trunk.currentAge = 0.0f;
         trunk.rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNode.name);
@@ -96,7 +96,12 @@ public class Plant: MonoBehaviour
         float vigor = setVigor(totalLightExposure, 1f);
 
         effectiveFloweringAge = plantSpecies.floweringAge * plantSpecies.vigorMax / vigor;
+
         
+        if (age >= effectiveFloweringAge && plantSpecies.apicalControl != plantSpecies.apicalControlMature)
+        {
+            plantSpecies.apicalControl = plantSpecies.apicalControlMature;
+        }
 
         if (vigor <= plantSpecies.vigorMin)
         {

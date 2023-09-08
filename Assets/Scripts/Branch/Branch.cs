@@ -100,7 +100,7 @@ public class Branch: MonoBehaviour
         NodesLookupTable.nodesDictionary.Add(newNode.name, newNode);
 
         Branch childBranch = newNode.nodeGameObject.GetComponent<Branch>();
-        childBranch.prototype = BranchPrototypesInstances.basicBranchPrototype;
+        childBranch.prototype = BranchPrototypesInstances.branchPrototype1;
         childBranch.maxAge = maxAge; //set other maxAge, now is max age of whole tree
         childBranch.currentAge = 0.0f;
         childBranch.rootNode = newBranchRootNode;

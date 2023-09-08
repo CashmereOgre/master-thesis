@@ -44,7 +44,7 @@ public static class NodesLookupTable
                     physiologicalAge = 0f,
                     maxLength = 50f,
                     parentNodeId = 0,
-                    childNodeIds = new List<int>{ 2, 3 },
+                    childNodeIds = new List<int>{ 2, 3, 4 },
                     nodeGameObject = nodePrefab
                 }
             },
@@ -52,7 +52,7 @@ public static class NodesLookupTable
                 {
                     id = 2,
                     isRoot = false,
-                    isMain = true,
+                    isMain = false,
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 90f, -30f),
                     age = 0f,
@@ -67,13 +67,163 @@ public static class NodesLookupTable
                 {
                     id = 3,
                     isRoot = false,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 90f, 0f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 30f,
+                    parentNodeId = 1,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 4, new Node()
+                {
+                    id = 4,
+                    isRoot = false,
                     isMain = false,
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 90f, 30f),
                     age = 0f,
                     physiologicalAge = 0f,
-                    maxLength = 90f,
+                    maxLength = 40f,
                     parentNodeId = 1,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 5, new Node()
+                {
+                    id = 5,
+                    isRoot = true,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 0f,
+                    parentNodeId = 0,
+                    childNodeIds = new List<int>{ 6 },
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 6, new Node()
+                {
+                    id = 6,
+                    isRoot = true,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 5f,
+                    parentNodeId = 5,
+                    childNodeIds = new List<int>{ 7, 8, 9 },
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 7, new Node()
+                {
+                    id = 7,
+                    isRoot = false,
+                    isMain = false,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 0f, 70f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 3f,
+                    parentNodeId = 6,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 8, new Node()
+                {
+                    id = 8,
+                    isRoot = false,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 30f, 0f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 4f,
+                    parentNodeId = 6,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 9, new Node()
+                {
+                    id = 9,
+                    isRoot = false,
+                    isMain = false,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 0f, -70f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 3f,
+                    parentNodeId = 6,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 10, new Node()
+                {
+                    id = 10,
+                    isRoot = true,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 0f,
+                    parentNodeId = 0,
+                    childNodeIds = new List<int>{ 11 },
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 11, new Node()
+                {
+                    id = 11,
+                    isRoot = true,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.identity,
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 50f,
+                    parentNodeId = 10,
+                    childNodeIds = new List<int>{ 12, 13 },
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 12, new Node()
+                {
+                    id = 12,
+                    isRoot = false,
+                    isMain = false,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 45f, -30f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 40f,
+                    parentNodeId = 11,
+                    childNodeIds = new List<int>(),
+                    nodeGameObject = nodePrefab
+                }
+            },
+            { 13, new Node()
+                {
+                    id = 13,
+                    isRoot = false,
+                    isMain = true,
+                    position = Vector3.zero,
+                    rotation = Quaternion.Euler(0f, 90f, -10f),
+                    age = 0f,
+                    physiologicalAge = 0f,
+                    maxLength = 15f,
+                    parentNodeId = 11,
                     childNodeIds = new List<int>(),
                     nodeGameObject = nodePrefab
                 }
