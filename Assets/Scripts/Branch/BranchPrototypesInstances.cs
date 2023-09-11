@@ -16,7 +16,7 @@ public static class BranchPrototypesInstances
         {
             maturityAge = 5f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0),
-            centerNodes = new List<Node>() { NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1) },
+            centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1),
             terminalNodes = new List<Node>()
             {
                 NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(2),
@@ -29,7 +29,7 @@ public static class BranchPrototypesInstances
         {
             maturityAge = 3f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(5),
-            centerNodes = new List<Node>() { NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(6) },
+            centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(6),
             terminalNodes = new List<Node>()
             {
                 NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(7),
@@ -42,7 +42,7 @@ public static class BranchPrototypesInstances
         {
             maturityAge = 1.5f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(10),
-            centerNodes = new List<Node>() { NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(11) },
+            centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(11),
             terminalNodes = new List<Node>()
             {
                 NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(12),

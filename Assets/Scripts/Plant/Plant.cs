@@ -33,7 +33,7 @@ public class Plant: MonoBehaviour
 
     public void initializePlant()
     {
-        Node rootNodePrototype = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0);
+        Node rootNodePrototype = plantSpecies.branchPrototype.rootNode;
         Node rootNode = new Node(rootNodePrototype);
         rootNode.nodeGameObject = rootNode.instantiateNode(plantGameObject.transform);
         rootNode = rootNode.nodeGameObject.GetComponent<Node>();
@@ -42,7 +42,6 @@ public class Plant: MonoBehaviour
         rootNode.isMain = rootNodePrototype.isMain;
         rootNode.position = rootNodePrototype.position;
         rootNode.rotation = getRandomPlantRotation();
-        rootNode.age = rootNodePrototype.age;
         rootNode.physiologicalAge = rootNodePrototype.physiologicalAge;
         rootNode.maxLength = rootNodePrototype.maxLength;
         rootNode.parentNodeId = rootNodePrototype.parentNodeId;
@@ -52,7 +51,7 @@ public class Plant: MonoBehaviour
         Destroy(rootNode.nodeGameObject.GetComponent<CapsuleCollider>());
         NodesLookupTable.nodesDictionary.Add(rootNode.nodeGameObject.name, rootNode);
 
-        Node terminalNodePrototype = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1);
+        Node terminalNodePrototype = plantSpecies.branchPrototype.centerNode;
         Node terminalNode = new Node(terminalNodePrototype);
         terminalNode.nodeGameObject = terminalNode.instantiateNode(rootNode.nodeGameObject.transform);
         terminalNode = terminalNode.nodeGameObject.GetComponent<Node>();
@@ -61,7 +60,6 @@ public class Plant: MonoBehaviour
         terminalNode.isMain = terminalNodePrototype.isMain;
         terminalNode.position = terminalNodePrototype.position;
         terminalNode.rotation = terminalNodePrototype.rotation;
-        terminalNode.age = terminalNodePrototype.age;
         terminalNode.physiologicalAge = terminalNodePrototype.physiologicalAge;
         terminalNode.maxLength = terminalNodePrototype.maxLength;
         terminalNode.parentNodeId = terminalNodePrototype.parentNodeId;
@@ -69,13 +67,10 @@ public class Plant: MonoBehaviour
         terminalNode.childNodeIds = terminalNodePrototype.childNodeIds;
         terminalNode.nodeGameObject.transform.localRotation = terminalNode.rotation;
         terminalNode.nodeGameObject.name = terminalNode.name;
-        terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
         NodesLookupTable.nodesDictionary.Add(terminalNode.nodeGameObject.name, terminalNode);
 
         Branch trunk = terminalNode.nodeGameObject.GetComponent<Branch>();
-        trunk.prototype = BranchPrototypesInstances.branchPrototype1;
-        trunk.maxAge = PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0).maxAge;
-        trunk.currentAge = 0.0f;
+        trunk.prototype = plantSpecies.branchPrototype;
         trunk.rootNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(rootNode.name);
         trunk.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(terminalNode.name);
         trunk.childBranches = new List<Branch>();
@@ -86,12 +81,14 @@ public class Plant: MonoBehaviour
         
         rootNode.plant = this;
         terminalNode.plant = this;
+
+        terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
     }
 
     public void growPlant()
     {
         totalLightExposure = trunk.calculateLightExposure();
-        age += 0.1f;
+        age += 0.001f;
 
         float vigor = setVigor(totalLightExposure, 1f);
 
@@ -110,7 +107,7 @@ public class Plant: MonoBehaviour
         }
 
         trunk.distributeVigor(vigor);
-        trunk.GrowBranch(1000f);
+        trunk.GrowBranch(1f);
     }
 
     public Vector3 getSeedPosition()

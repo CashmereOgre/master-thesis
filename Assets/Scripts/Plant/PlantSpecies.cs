@@ -24,6 +24,8 @@ public class PlantSpecies
     public float floweringAge { get; set; }
     public int seedsPerYear { get; set; }
     public float seedingRadius { get; set; }
+    public BranchPrototype branchPrototype { get; set; }
+    public Color branchColor { get; set; }
     //public float optimalTemperature { get; set; }
     //public float optimalPrecipitation { get; set; }
     //public float floweringAge { get; set; }
@@ -49,6 +51,8 @@ public class PlantSpecies
         floweringAge = plantSpecies.floweringAge;
         seedsPerYear = plantSpecies.seedsPerYear;
         seedingRadius = plantSpecies.seedingRadius;
+        branchPrototype = plantSpecies.branchPrototype;
+        branchColor = plantSpecies.branchColor;
     }
 
     public PlantSpecies() {}

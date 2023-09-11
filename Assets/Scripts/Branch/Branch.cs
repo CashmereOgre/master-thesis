@@ -9,69 +9,50 @@ using UnityEngine;
 public class Branch: MonoBehaviour
 {
     public BranchPrototype prototype { get; set; }
-    public float maxAge { get; set; }
-    public float currentAge { get; set; }
     public Node rootNode { get; set; }
     public Node terminalNode { get; set; }
     public List<Branch> childBranches { get; set; }
 
-    public SphereCollider boundingSphere;
     public CapsuleCollider capsuleCollider;
     public float lightExposure = 0;
 
-    private bool stop = false;
-
-    //private Dictionary<int, Vector3> childBranchesTerminalNodesIdsAndRootPositions = new Dictionary<int, Vector3>();
     private Dictionary<string, Vector3> collisionsDictionary = new Dictionary<string, Vector3>();
 
     private float vigor = 0;
+    private bool createdChildBranches = false;
 
     public void GrowBranch(float ageStep)
     {
-        if (stop)
-            return;
+        capsuleCollider = updateCapsuleColliderDimensions();
 
-        if (prototype != null)
+        if (terminalNode.physiologicalAge < prototype.maturityAge)
         {
-            terminalNode.age += ageStep;
+            float physiologicalAge = getPhysiologicalAge(ageStep);
+            Quaternion optimisedBranchOrientation = getOptimisedBranchOrientation(terminalNode.rotation, terminalNode.plant.plantSpecies.alphaTropism);
+            terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge, optimisedBranchOrientation);
+            return;
+        }
 
-            // TODO to improve when adding branches shredding and blooming
-            //bool isBecomingMature = newAge >= prototype.maturityAge ? rootNode.age < prototype.maturityAge : false;
-            //bool decay = rootNode.age >= prototype.maturityAge;
-
-            //childBranchesTerminalNodesIdsAndRootPositions = getAllInDepthChildBranchesPositions(); //Will see if it is necessary at all
-
-            capsuleCollider = updateCapsuleColliderDimensions();
-
-            //Debug.Log($"Terminal node id: {terminalNode.id}, terminal node position: {terminalNode.nodeGameObject.transform.position}, center of geometry: {getBranchCenterOfGeometry()}");
-
-            if (terminalNode.physiologicalAge < prototype.maturityAge)
+        if (childBranches.Any())
+        {
+            foreach (Branch childBranch in childBranches)
             {
-                float physiologicalAge = getPhysiologicalAge(ageStep);
-                Quaternion optimisedBranchOrientation = getOptimisedBranchOrientation(terminalNode.rotation, terminalNode.plant.plantSpecies.alphaTropism);
-                terminalNode.nodeGameObject = terminalNode.growNode(physiologicalAge, optimisedBranchOrientation);
-                return;
+                childBranch.GrowBranch(ageStep);
+            }
+            return;
+        }
+
+        if (vigor > terminalNode.plant.plantSpecies.vigorMin && !createdChildBranches)
+        {
+            foreach (Node prototypeTerminalNode in prototype.terminalNodes)
+            {
+                int newNodeId = NodesLookupTable.getIdOfLastNodeInPlant(terminalNode.plant.id) + 1;
+
+                Branch childBranch = AttachBranch(terminalNode.nodeGameObject.name, newNodeId, prototypeTerminalNode, terminalNode.plant);
+                childBranches.Add(childBranch);
             }
 
-            if (childBranches.Any())
-            {
-                foreach (Branch childBranch in childBranches)
-                {
-                    childBranch.GrowBranch(ageStep);
-                }
-                return;
-            }
-
-            if (vigor > terminalNode.plant.plantSpecies.vigorMin)
-            {
-                foreach (Node prototypeTerminalNode in prototype.terminalNodes)
-                {
-                    int newNodeId = NodesLookupTable.getIdOfLastNodeInPlant(terminalNode.plant.id) + 1;
-
-                    Branch childBranch = AttachBranch(terminalNode.nodeGameObject.name, newNodeId, prototypeTerminalNode, terminalNode.plant);
-                    childBranches.Add(childBranch);
-                }
-            }
+            createdChildBranches = true;
         }
     }
 
@@ -87,7 +68,6 @@ public class Branch: MonoBehaviour
         newNode.isMain = branchPrototypeTerminalNode.isMain;
         newNode.position = branchPrototypeTerminalNode.position;
         newNode.rotation = branchPrototypeTerminalNode.rotation;
-        newNode.age = branchPrototypeTerminalNode.age;
         newNode.physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         newNode.maxLength = branchPrototypeTerminalNode.maxLength;
         newNode.plant = plant;
@@ -100,9 +80,7 @@ public class Branch: MonoBehaviour
         NodesLookupTable.nodesDictionary.Add(newNode.name, newNode);
 
         Branch childBranch = newNode.nodeGameObject.GetComponent<Branch>();
-        childBranch.prototype = BranchPrototypesInstances.branchPrototype1;
-        childBranch.maxAge = maxAge; //set other maxAge, now is max age of whole tree
-        childBranch.currentAge = 0.0f;
+        childBranch.prototype = prototype;
         childBranch.rootNode = newBranchRootNode;
         childBranch.terminalNode = NodesLookupTable.nodesDictionary.GetValueOrDefault(newNode.name); 
         childBranch.childBranches = new List<Branch>();
@@ -118,22 +96,6 @@ public class Branch: MonoBehaviour
 
         return center;
     }
-
-    //private Dictionary<int,Vector3> getAllInDepthChildBranchesPositions()
-    //{
-    //    Dictionary<int, Vector3> result = new Dictionary<int, Vector3>();
-    //    if (childBranches.Any())
-    //    {
-    //        foreach (Branch child in childBranches)
-    //        {
-    //            result.AddRange(child.getAllInDepthChildBranchesPositions());
-    //        }
-    //    }
-
-    //    result.Add(terminalNode.id, terminalNode.nodeGameObject.transform.position);
-
-    //    return result;
-    //}
 
     public CapsuleCollider setCapsuleCollider()
     {
@@ -218,7 +180,7 @@ public class Branch: MonoBehaviour
 
             if (childBranch.terminalNode.isMain)
             {
-                if(vigorToMain < vigorMin)
+                if (vigorToMain < vigorMin)
                 {
                     destroyChildBranch(childBranch);
                     continue;

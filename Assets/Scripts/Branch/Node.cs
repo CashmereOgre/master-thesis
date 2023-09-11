@@ -11,7 +11,6 @@ public class Node : MonoBehaviour
     public bool isMain { get; set; }
     public Vector3 position { get; set; }
     public Quaternion rotation { get; set; }
-    public float age { get; set; }
     public float physiologicalAge { get; set; }
     public float maxLength { get; set; }
     public Plant plant { get; set; }
@@ -35,7 +34,6 @@ public class Node : MonoBehaviour
         isMain = branchPrototypeTerminalNode.isMain;
         position = branchPrototypeTerminalNode.position;
         rotation = branchPrototypeTerminalNode.rotation;
-        age = branchPrototypeTerminalNode.age;
         physiologicalAge = branchPrototypeTerminalNode.physiologicalAge;
         maxLength = branchPrototypeTerminalNode.maxLength;
         plant = null;
@@ -74,14 +72,7 @@ public class Node : MonoBehaviour
 
             Vector3 tropismOffset = (g1 * g2 * gravityDirection) / (physiologicalAge + g1);
 
-            if (float.IsNaN(tropismOffset.x))
-                Debug.LogWarning("NaN");
-
-            position = position.normalized * branchLength;
             position += tropismOffset;
-
-            if (float.IsNaN(position.x))
-                Debug.LogWarning("NaN");
 
             nodeGameObject.transform.localPosition = position;
 
@@ -95,6 +86,8 @@ public class Node : MonoBehaviour
     {
         var lineRenderer = nodeGameObject.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+        lineRenderer.startColor = plant.plantSpecies.branchColor;
+        lineRenderer.endColor = plant.plantSpecies.branchColor;
 
         parentNode = new Node(NodesLookupTable.nodesDictionary[parentNodeName]); 
 
