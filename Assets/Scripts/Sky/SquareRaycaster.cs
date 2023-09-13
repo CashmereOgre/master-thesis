@@ -66,7 +66,7 @@ public class SquareRaycaster : MonoBehaviour
         };
     }
 
-    private void addRayToDictionary(RaycastHit hit, Dictionary<string, int> objectRayCountsHitDictionary)
+    protected void addRayToDictionary(RaycastHit hit, Dictionary<string, int> objectRayCountsHitDictionary)
     {
         if (hit.collider != null)
         {
