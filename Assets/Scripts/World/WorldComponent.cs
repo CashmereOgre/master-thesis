@@ -14,7 +14,7 @@ public class WorldComponent : MonoBehaviour
 
     public GameObject plantPrefab;
 
-    public Raycaster raycaster;
+    public SquareRaycaster raycaster;
 
     private int squareHeight = 200;
     private int squareDimension = 30;
@@ -50,25 +50,25 @@ public class WorldComponent : MonoBehaviour
         plant1.plantGameObject.name = plant1.id.ToString();
         plant1.plantGameObject.transform.position = plant1Position;
 
-        PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
-        Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
-        Plant plant2 = new Plant(plant2Specimen, plant2Position);
-        plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
-        plant2.id = 1;
-        plant2.plantGameObject.name = plant2.id.ToString();
-        plant2.plantGameObject.transform.position = plant2Position;
+        //PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
+        //Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
+        //Plant plant2 = new Plant(plant2Specimen, plant2Position);
+        //plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
+        //plant2.id = 1;
+        //plant2.plantGameObject.name = plant2.id.ToString();
+        //plant2.plantGameObject.transform.position = plant2Position;
 
-        PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
-        Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
-        Plant plant3 = new Plant(plant3Specimen, plant3Position);
-        plant3.plantGameObject = plant3.instantiatePlant(plantPrefab);
-        plant3.id = 2;
-        plant3.plantGameObject.name = plant3.id.ToString();
-        plant3.plantGameObject.transform.position = plant3Position;
+        //PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
+        //Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
+        //Plant plant3 = new Plant(plant3Specimen, plant3Position);
+        //plant3.plantGameObject = plant3.instantiatePlant(plantPrefab);
+        //plant3.id = 2;
+        //plant3.plantGameObject.name = plant3.id.ToString();
+        //plant3.plantGameObject.transform.position = plant3Position;
 
         plantsList.Add(plant1);
-        plantsList.Add(plant2);
-        plantsList.Add(plant3);
+        //plantsList.Add(plant2);
+        //plantsList.Add(plant3);
     }
 
     private void addNewPlant(Vector3 position, Plant parent)

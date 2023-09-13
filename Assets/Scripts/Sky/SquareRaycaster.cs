@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 
-public class Raycaster : MonoBehaviour
+public class SquareRaycaster : MonoBehaviour
 {
-    private List<Vector3> raysSquare = new List<Vector3>();
+    private List<Vector3> raysSquareStartingPoints = new List<Vector3>();
 
-    public void setRaysSquare(int squareDimension, int sideDensity, float squareHeight)
+    public List<Vector3> setRaysSquare(int squareDimension, int sideDensity, float squareHeight)
     {
         float startingCorner = -(squareDimension / 2);
         float distanceBetweenPoints = (float)squareDimension / (float)sideDensity;
@@ -18,17 +18,19 @@ public class Raycaster : MonoBehaviour
         {
             for (int j = 0; j <= sideDensity; j++)
             {
-                Vector3 rayPoint = new Vector3(startingCorner + distanceBetweenPoints * j, squareHeight, startingCorner + distanceBetweenPoints * i);
-                raysSquare.Add(rayPoint);
+                Vector3 rayStartingPoint = new Vector3(startingCorner + distanceBetweenPoints * j, squareHeight, startingCorner + distanceBetweenPoints * i);
+                raysSquareStartingPoints.Add(rayStartingPoint);
             }
         }
+
+        return raysSquareStartingPoints;
     }
 
     public Dictionary<string, int> castRaysSquare()
     {
         Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
 
-        foreach (Vector3 rayPoint in raysSquare)
+        foreach (Vector3 rayPoint in raysSquareStartingPoints)
         {
             List<Vector3> directions = getDirections(rayPoint);
 
@@ -45,37 +47,6 @@ public class Raycaster : MonoBehaviour
 
         return objectRayCountsDictionary;
     }
-
-    //public Dictionary<string, int> castRaysSquare(int squareDimension, float squareHeight)
-    //{
-    //    float startingCorner = -(squareDimension / 2);
-    //    Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
-    //    Vector3 currentPoint = new Vector3(startingCorner, squareHeight, startingCorner);
-
-    //    for (int i = 0; i <= squareDimension; i++)
-    //    {
-    //        for (int j = 0; j <= squareDimension; j++)
-    //        {
-    //            List<Vector3> directions = getDirections(currentPoint);
-
-    //            foreach (Vector3 direction in directions)
-    //            {
-    //                Ray ray = new Ray(currentPoint, direction);
-    //                RaycastHit hit;
-
-    //                Physics.Raycast(ray, out hit, squareHeight * Mathf.Sqrt(2));
-
-    //                addRayToDictionary(hit, objectRayCountsDictionary);
-    //            }
-
-    //            currentPoint.x += 1;
-    //        }
-    //        currentPoint.z += 1;
-    //        currentPoint.x = startingCorner;
-    //    }
-
-    //    return objectRayCountsDictionary;
-    //}
 
     private List<Vector3> getDirections(Vector3 currentPoint)
     {
@@ -95,18 +66,18 @@ public class Raycaster : MonoBehaviour
         };
     }
 
-    private void addRayToDictionary(RaycastHit hit, Dictionary<string, int> objectRayCountsDictionary)
+    private void addRayToDictionary(RaycastHit hit, Dictionary<string, int> objectRayCountsHitDictionary)
     {
         if (hit.collider != null)
         {
             string colliderGameObjectName = hit.collider.gameObject.name;
-            if (objectRayCountsDictionary.ContainsKey(colliderGameObjectName))
+            if (objectRayCountsHitDictionary.ContainsKey(colliderGameObjectName))
             {
-                objectRayCountsDictionary[colliderGameObjectName] += 1;
+                objectRayCountsHitDictionary[colliderGameObjectName] += 1;
                 return;
             }
 
-            objectRayCountsDictionary.Add(colliderGameObjectName, 1);
+            objectRayCountsHitDictionary.Add(colliderGameObjectName, 1);
         }
     }
 }

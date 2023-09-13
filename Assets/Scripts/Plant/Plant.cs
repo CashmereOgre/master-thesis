@@ -107,7 +107,7 @@ public class Plant: MonoBehaviour
         }
 
         trunk.distributeVigor(vigor);
-        trunk.GrowBranch(1f);
+        trunk.GrowBranch(100f);
     }
 
     public Vector3 getSeedPosition()
