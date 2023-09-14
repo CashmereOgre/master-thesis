@@ -154,7 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodePrefab: {fileID: 6551240598046226684, guid: 8e5620a43d1dba946ad96ecd3c440517, type: 3}
   plantPrefab: {fileID: 8165531413994236120, guid: c3fa120753bb15845be15212539f8e37, type: 3}
-  raycaster: {fileID: 365712316}
+  squareRaycaster: {fileID: 365712316}
+  cubeRaycaster: {fileID: 365712318}
 --- !u!4 &36680095
 Transform:
   m_ObjectHideFlags: 0
@@ -180,6 +181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 365712317}
   - component: {fileID: 365712316}
+  - component: {fileID: 365712318}
   m_Layer: 0
   m_Name: Sky
   m_TagString: Untagged
@@ -214,6 +216,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &365712318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 365712315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 053e7b0dbb7cf394190fd3f9c063e05f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

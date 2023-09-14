@@ -14,7 +14,7 @@ public static class BranchPrototypesInstances
 
         branchPrototype1 = new BranchPrototype()
         {
-            maturityAge = 5f,
+            maturityAge = 2f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(0),
             centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(1),
             terminalNodes = new List<Node>()
@@ -27,7 +27,7 @@ public static class BranchPrototypesInstances
 
         branchPrototype2 = new BranchPrototype()
         {
-            maturityAge = 3f,
+            maturityAge = 1.5f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(5),
             centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(6),
             terminalNodes = new List<Node>()

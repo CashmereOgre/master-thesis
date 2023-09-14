@@ -45,7 +45,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6551240598046226684}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -2432090755550338912, guid: c9ce7493e12319a4da91e6e37425ffd6, type: 3}
 --- !u!23 &6551240598046226686
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -114,7 +114,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725109ccce71add40a3f4c75872af1bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundingSphere: {fileID: 0}
   capsuleCollider: {fileID: 7541922549228653165}
   lightExposure: 0
 --- !u!120 &7409937087785753920

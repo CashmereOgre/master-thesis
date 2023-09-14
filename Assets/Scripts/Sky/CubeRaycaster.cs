@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -67,18 +68,20 @@ namespace Assets.Scripts.Sky
 
             foreach (Vector3 rayStartingPoint in raysTopStartingPoints)
             {
-                Vector3 direction = new Vector3(rayStartingPoint.x, -5, rayStartingPoint.z);
+                Vector3 endPoint = new Vector3(rayStartingPoint.x, 0, rayStartingPoint.z);
+                Vector3 direction = (endPoint - rayStartingPoint).normalized;
                 Ray ray = new Ray(rayStartingPoint, direction);
                 RaycastHit hit;
 
-                Physics.Raycast(ray, out hit, direction.y);
+                Physics.Raycast(ray, out hit, rayStartingPoint.y);
 
                 addRayToDictionary(hit, objectRayCountsDictionary);
             }
 
             foreach (Vector3 rayStartingPoint in raysBackFrontStartingPoints)
             {
-                Vector3 direction = new Vector3(-rayStartingPoint.x, rayStartingPoint.y, rayStartingPoint.z);
+                Vector3 endPoint = new Vector3(-rayStartingPoint.x, rayStartingPoint.y, rayStartingPoint.z);
+                Vector3 direction = (endPoint - rayStartingPoint).normalized;
                 Ray ray = new Ray(rayStartingPoint, direction);
                 RaycastHit hit;
 
@@ -89,7 +92,8 @@ namespace Assets.Scripts.Sky
 
             foreach (Vector3 rayStartingPoint in raysLeftRightStartingPoints)
             {
-                Vector3 direction = new Vector3(rayStartingPoint.x, rayStartingPoint.y, -rayStartingPoint.z);
+                Vector3 endPoint = new Vector3(rayStartingPoint.x, rayStartingPoint.y, -rayStartingPoint.z);
+                Vector3 direction = (endPoint - rayStartingPoint).normalized;
                 Ray ray = new Ray(rayStartingPoint, direction);
                 RaycastHit hit;
 

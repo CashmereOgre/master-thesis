@@ -106,15 +106,13 @@ public class Branch: MonoBehaviour
 
     public float calculateLightExposure()
     {
-        float currentBranchLightExposure = 0;
         lightExposure = 0;
 
-        if (RaycastCollisionsLookupTable.objectRayCountDictionary.TryGetValue(gameObject.name, out int rays))
+        if (!childBranches.Any() && RaycastCollisionsLookupTable.objectRayCountDictionary.TryGetValue(gameObject.name, out int rays))
         {
-            currentBranchLightExposure = rays / capsuleCollider.height;
+            lightExposure = rays / capsuleCollider.height;
+            return lightExposure;
         }
-        
-        lightExposure += currentBranchLightExposure;
 
         if (childBranches.Any())
         {

@@ -1,4 +1,5 @@
 using Assets.Scripts.HelpfulStructures;
+using Assets.Scripts.Sky;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,9 @@ public class WorldComponent : MonoBehaviour
 
     public GameObject plantPrefab;
 
-    public SquareRaycaster raycaster;
+    public SquareRaycaster squareRaycaster;
+
+    public CubeRaycaster cubeRaycaster;
 
     private int squareHeight = 200;
     private int squareDimension = 30;
@@ -33,7 +36,8 @@ public class WorldComponent : MonoBehaviour
 
     private void initializeWorld()
     {
-        raycaster.setRaysSquare(squareDimension, sideDensity, squareHeight);
+        squareRaycaster.setRaysSquare(squareDimension, sideDensity, squareHeight);
+        //cubeRaycaster.setRaysCube(squareDimension, sideDensity, squareHeight);
         BranchPrototypesInstances.Setup(nodePrefab);
         PlantSpeciesLookupTable.setupPlantSpecies();
     }
@@ -50,13 +54,13 @@ public class WorldComponent : MonoBehaviour
         plant1.plantGameObject.name = plant1.id.ToString();
         plant1.plantGameObject.transform.position = plant1Position;
 
-        //PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
-        //Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
-        //Plant plant2 = new Plant(plant2Specimen, plant2Position);
-        //plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
-        //plant2.id = 1;
-        //plant2.plantGameObject.name = plant2.id.ToString();
-        //plant2.plantGameObject.transform.position = plant2Position;
+        PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
+        Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
+        Plant plant2 = new Plant(plant2Specimen, plant2Position);
+        plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
+        plant2.id = 1;
+        plant2.plantGameObject.name = plant2.id.ToString();
+        plant2.plantGameObject.transform.position = plant2Position;
 
         //PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
         //Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
@@ -67,7 +71,7 @@ public class WorldComponent : MonoBehaviour
         //plant3.plantGameObject.transform.position = plant3Position;
 
         plantsList.Add(plant1);
-        //plantsList.Add(plant2);
+        plantsList.Add(plant2);
         //plantsList.Add(plant3);
     }
 
@@ -86,7 +90,8 @@ public class WorldComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RaycastCollisionsLookupTable.objectRayCountDictionary = raycaster.castRaysSquare();
+        RaycastCollisionsLookupTable.objectRayCountDictionary = squareRaycaster.castRaysSquare();
+        //RaycastCollisionsLookupTable.objectRayCountDictionary = cubeRaycaster.castRaysCube();
 
         foreach (Plant plant in plantsList.ToList())
         {

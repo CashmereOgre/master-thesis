@@ -88,7 +88,7 @@ public class Plant: MonoBehaviour
     public void growPlant()
     {
         totalLightExposure = trunk.calculateLightExposure();
-        age += 0.001f;
+        age += 0.01f;
 
         float vigor = setVigor(totalLightExposure, 1f);
 
@@ -107,7 +107,7 @@ public class Plant: MonoBehaviour
         }
 
         trunk.distributeVigor(vigor);
-        trunk.GrowBranch(100f);
+        trunk.GrowBranch(10f);
     }
 
     public Vector3 getSeedPosition()
