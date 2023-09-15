@@ -180,7 +180,7 @@ public static class NodesLookupTable
                     position = Vector3.zero,
                     rotation = Quaternion.identity,
                     physiologicalAge = 0f,
-                    maxLength = 50f,
+                    maxLength = 1.5f,
                     parentNodeId = 10,
                     childNodeIds = new List<int>{ 12, 13 },
                     nodeGameObject = nodePrefab
@@ -194,7 +194,7 @@ public static class NodesLookupTable
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 45f, -30f),
                     physiologicalAge = 0f,
-                    maxLength = 40f,
+                    maxLength = 2f,
                     parentNodeId = 11,
                     childNodeIds = new List<int>(),
                     nodeGameObject = nodePrefab
@@ -208,7 +208,7 @@ public static class NodesLookupTable
                     position = Vector3.zero,
                     rotation = Quaternion.Euler(0f, 90f, -10f),
                     physiologicalAge = 0f,
-                    maxLength = 15f,
+                    maxLength = 1f,
                     parentNodeId = 11,
                     childNodeIds = new List<int>(),
                     nodeGameObject = nodePrefab
