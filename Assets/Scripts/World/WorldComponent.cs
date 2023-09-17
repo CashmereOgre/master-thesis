@@ -62,6 +62,7 @@ public class WorldComponent : MonoBehaviour
         plant2.plantGameObject.name = plant2.id.ToString();
         plant2.plantGameObject.transform.position = plant2Position;
 
+
         PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
         Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
         Plant plant3 = new Plant(plant3Specimen, plant3Position);
@@ -80,7 +81,7 @@ public class WorldComponent : MonoBehaviour
         PlantSpecies plantSpecimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(parent.plantSpecies.id));
         Plant plant = new Plant(plantSpecimen, position);
         plant.plantGameObject = plant.instantiatePlant(plantPrefab);
-        plant.id = plantsList.Count;
+        plant.id = plantsList.Last().id + 1;
         plant.plantGameObject.name = plant.id.ToString();
         plant.plantGameObject.transform.position = position;
 

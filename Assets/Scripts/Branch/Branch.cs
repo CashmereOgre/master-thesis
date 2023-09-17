@@ -213,7 +213,8 @@ public class Branch: MonoBehaviour
     {
         float vigorMin = terminalNode.plant.plantSpecies.vigorMin;
         float vigorMax = terminalNode.plant.plantSpecies.vigorMax;
-        float x = (vigor - vigorMin) / (vigorMax - vigorMin);
+        float gpAlignment = terminalNode.plant.plantSpecies.gpAlignment;
+        float x = (vigor - vigorMin) / (vigorMax - vigorMin) * gpAlignment;
 
         return (3 * Mathf.Pow(x, 2) - 2 * Mathf.Pow(x, 3)) * terminalNode.plant.plantSpecies.gp;
     }

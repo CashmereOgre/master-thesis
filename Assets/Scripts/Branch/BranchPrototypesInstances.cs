@@ -40,7 +40,7 @@ public static class BranchPrototypesInstances
 
         branchPrototype3 = new BranchPrototype()
         {
-            maturityAge = 1f,
+            maturityAge = 1.5f,
             rootNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(10),
             centerNode = NodesLookupTable.nodesDictionaryForBranchPrototypes.GetValueOrDefault(11),
             terminalNodes = new List<Node>()

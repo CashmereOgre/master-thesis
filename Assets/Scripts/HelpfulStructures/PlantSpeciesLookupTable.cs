@@ -26,7 +26,7 @@ namespace Assets.Scripts.HelpfulStructures
                         vigorMax = 900f,
                         vigorMin = 0.5f,
                         g1 = 0.2f,
-                        g2 = 0.5f, 
+                        g2 = 0.5f,
                         w1 = 0.5f,
                         w2 = 0.14f,
                         scalingCoefficientBeta = 1.29f,
@@ -35,7 +35,8 @@ namespace Assets.Scripts.HelpfulStructures
                         seedsPerYear = 2,
                         seedingRadius = 15,
                         branchPrototype = BranchPrototypesInstances.branchPrototype1,
-                        branchColor = Color.red
+                        branchColor = Color.red,
+                        gpAlignment = 1f
                     }
                 },
                 { 1, new PlantSpecies()
@@ -47,9 +48,9 @@ namespace Assets.Scripts.HelpfulStructures
                         apicalControl = 0.65f,
                         apicalControlMature = 0.65f,
                         vigorMax = 600f,
-                        vigorMin = 0.5f,
+                        vigorMin = 2f,
                         g1 = 1.0f,
-                        g2 = 0.5f, 
+                        g2 = 0.5f,
                         w1 = 0.5f,
                         w2 = 0.81f,
                         scalingCoefficientBeta = 1.6f,
@@ -58,7 +59,8 @@ namespace Assets.Scripts.HelpfulStructures
                         seedsPerYear = 1,
                         seedingRadius = 30,
                         branchPrototype = BranchPrototypesInstances.branchPrototype2,
-                        branchColor = Color.green
+                        branchColor = Color.green,
+                        gpAlignment = 0.6f
                     }
                 },
                 { 2, new PlantSpecies()
@@ -70,18 +72,19 @@ namespace Assets.Scripts.HelpfulStructures
                         apicalControl = 0.78f,
                         apicalControlMature = 0.43f,
                         vigorMax = 200f,
-                        vigorMin = 0.5f,
+                        vigorMin = 4f,
                         g1 = 0.73f,
                         g2 = 0.5f,
                         w1 = 0.5f,
                         w2 = 0.43f,
                         scalingCoefficientBeta = 2.5f,
                         alphaTropism = -0.27f,
-                        floweringAge = 5f,
+                        floweringAge = 3f,
                         seedsPerYear = 3,
                         seedingRadius = 40,
                         branchPrototype = BranchPrototypesInstances.branchPrototype3,
-                        branchColor = Color.blue
+                        branchColor = Color.blue,
+                        gpAlignment = 0.3f
                     }
                 }
             };
