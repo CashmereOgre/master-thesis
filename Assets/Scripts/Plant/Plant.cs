@@ -141,6 +141,7 @@ public class Plant: MonoBehaviour
 
     private void destroyPlant()
     {
+        ResearchData.speciesPlantCount[plantSpecies.id] -= 1;
         Destroy(trunk.terminalNode.gameObject);
         Destroy(trunk.rootNode.gameObject);
         Destroy(plantGameObject);

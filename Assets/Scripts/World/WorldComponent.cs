@@ -1,11 +1,11 @@
-using Assets.Scripts.HelpfulStructures;
-using Assets.Scripts.Sky;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.MaterialProperty;
+using Assets.Scripts.HelpfulStructures;
+using Assets.Scripts.Sky;
 
 public class WorldComponent : MonoBehaviour
 {
@@ -53,6 +53,7 @@ public class WorldComponent : MonoBehaviour
         plant1.id = 0;
         plant1.plantGameObject.name = plant1.id.ToString();
         plant1.plantGameObject.transform.position = plant1Position;
+        ResearchData.speciesPlantCount[plant1.plantSpecies.id] += 1;
 
         PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
         Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
@@ -61,7 +62,7 @@ public class WorldComponent : MonoBehaviour
         plant2.id = 1;
         plant2.plantGameObject.name = plant2.id.ToString();
         plant2.plantGameObject.transform.position = plant2Position;
-
+        ResearchData.speciesPlantCount[plant2.plantSpecies.id] += 1;
 
         PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
         Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
@@ -70,6 +71,7 @@ public class WorldComponent : MonoBehaviour
         plant3.id = 2;
         plant3.plantGameObject.name = plant3.id.ToString();
         plant3.plantGameObject.transform.position = plant3Position;
+        ResearchData.speciesPlantCount[plant3.plantSpecies.id] += 1;
 
         plantsList.Add(plant1);
         plantsList.Add(plant2);
@@ -84,6 +86,7 @@ public class WorldComponent : MonoBehaviour
         plant.id = plantsList.Last().id + 1;
         plant.plantGameObject.name = plant.id.ToString();
         plant.plantGameObject.transform.position = position;
+        ResearchData.speciesPlantCount[plant.plantSpecies.id] += 1;
 
         plant.initializePlant();
         plantsList.Add(plant);
@@ -91,6 +94,9 @@ public class WorldComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
+        ResearchData.worldAge += 0.01f;
+        Debug.Log(ResearchData.worldAge.ToString());
+
         //RaycastCollisionsLookupTable.objectRayCountDictionary = squareRaycaster.castRaysSquare();
         RaycastCollisionsLookupTable.objectRayCountDictionary = cubeRaycaster.castRaysCube();
 
