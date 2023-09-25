@@ -87,6 +87,11 @@ public class Branch: MonoBehaviour
 
         childBranch.capsuleCollider = childBranch.setCapsuleCollider();
 
+        int plantId = terminalNode.plant.id;
+        ResearchData.increaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
+        ResearchData.increaseCurrentBranchCountForFirstTrees(plantId);
+        ResearchData.increaseOverallBranchCountForFirstTrees(plantId);
+
         return childBranch;
     }
 
@@ -261,6 +266,11 @@ public class Branch: MonoBehaviour
 
     private void destroyChildBranch(Branch childBranch)
     {
+        int plantId = terminalNode.plant.id;
+        ResearchData.decreaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
+        ResearchData.decreaseCurrentBranchCountForFirstTrees(plantId);
+        ResearchData.increaseFallOffBranchCountForFirstTrees(plantId);
+
         childBranches.Remove(childBranch);
         Destroy(childBranch.terminalNode.gameObject);
     }

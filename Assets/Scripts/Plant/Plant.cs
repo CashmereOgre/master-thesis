@@ -83,6 +83,11 @@ public class Plant: MonoBehaviour
         terminalNode.plant = this;
 
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
+
+        ResearchData.increasePlantCountForSpecies(plantSpecies.id);
+        ResearchData.increaseBranchCountForSpecies(plantSpecies.id);
+        ResearchData.increaseCurrentBranchCountForFirstTrees(id);
+        ResearchData.increaseOverallBranchCountForFirstTrees(id);
     }
 
     public void growPlant()
@@ -141,7 +146,10 @@ public class Plant: MonoBehaviour
 
     private void destroyPlant()
     {
-        ResearchData.speciesPlantCount[plantSpecies.id] -= 1;
+        ResearchData.decreasePlantCountForSpecies(plantSpecies.id);
+        ResearchData.decreaseBranchCountForSpecies(plantSpecies.id);
+        ResearchData.decreaseCurrentBranchCountForFirstTrees(id);
+        ResearchData.increaseFallOffBranchCountForFirstTrees(id);
         Destroy(trunk.terminalNode.gameObject);
         Destroy(trunk.rootNode.gameObject);
         Destroy(plantGameObject);
