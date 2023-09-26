@@ -205,16 +205,16 @@ namespace Assets.Scripts.HelpfulStructures
 
         public static void writeDataToFiles()
         {
-            string dateTimeNow = DateTime.Now.ToString();
+            string dateTimeNow = DateTime.Now.ToString("dd.MM.yy hh-mm-ss");
             string fileName = $"species-plant-count-{dateTimeNow}.csv";
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("world age, species 1, species 2, species 3");
+                sw.WriteLine("world age;species 1;species 2;species 3");
 
                 foreach (KeyValuePair<float, int> pair in species1PlantCountInWorldAge)
                 {
-                    sw.WriteLine($"{pair.Key}, {pair.Value}, {species2PlantCountInWorldAge[pair.Key]}, {species3PlantCountInWorldAge[pair.Key]}");
+                    sw.WriteLine($"{pair.Key};{pair.Value};{species2PlantCountInWorldAge[pair.Key]};{species3PlantCountInWorldAge[pair.Key]}");
                 }
             }
 
@@ -226,7 +226,7 @@ namespace Assets.Scripts.HelpfulStructures
 
                 foreach (KeyValuePair<float, int> pair in species1CurrentBranchCountInWorldAge)
                 {
-                    sw.WriteLine($"{pair.Key}, {pair.Value}, {species2CurrentBranchCountInWorldAge[pair.Key]}, {species3CurrentBranchCountInWorldAge[pair.Key]}");
+                    sw.WriteLine($"{pair.Key};{pair.Value};{species2CurrentBranchCountInWorldAge[pair.Key]};{species3CurrentBranchCountInWorldAge[pair.Key]}");
                 }
             }
 
@@ -238,7 +238,7 @@ namespace Assets.Scripts.HelpfulStructures
 
                 foreach (KeyValuePair<float, int> pair in plant1CurrentBranchCountInWorldAge)
                 {
-                    sw.WriteLine($"{pair.Key}, {pair.Value}, {plant1FallOffBranchCountInWorldAge[pair.Key]}, {plant1OverallBranchCountInWorldAge[pair.Key]}");
+                    sw.WriteLine($"{pair.Key};{pair.Value};{plant1FallOffBranchCountInWorldAge[pair.Key]};{plant1OverallBranchCountInWorldAge[pair.Key]}");
                 }
             }
 
@@ -250,7 +250,7 @@ namespace Assets.Scripts.HelpfulStructures
 
                 foreach (KeyValuePair<float, int> pair in plant2CurrentBranchCountInWorldAge)
                 {
-                    sw.WriteLine($"{pair.Key}, {pair.Value}, {plant2FallOffBranchCountInWorldAge[pair.Key]}, {plant2OverallBranchCountInWorldAge[pair.Key]}");
+                    sw.WriteLine($"{pair.Key};{pair.Value};{plant2FallOffBranchCountInWorldAge[pair.Key]};{plant2OverallBranchCountInWorldAge[pair.Key]}");
                 }
             }
 
@@ -262,7 +262,7 @@ namespace Assets.Scripts.HelpfulStructures
 
                 foreach (KeyValuePair<float, int> pair in plant3CurrentBranchCountInWorldAge)
                 {
-                    sw.WriteLine($"{pair.Key}, {pair.Value}, {plant3FallOffBranchCountInWorldAge[pair.Key]}, {plant3OverallBranchCountInWorldAge[pair.Key]}");
+                    sw.WriteLine($"{pair.Key};{pair.Value};{plant3FallOffBranchCountInWorldAge[pair.Key]};{plant3OverallBranchCountInWorldAge[pair.Key]}");
                 }
             }
         }

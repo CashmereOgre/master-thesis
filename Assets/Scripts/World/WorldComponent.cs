@@ -115,7 +115,7 @@ public class WorldComponent : MonoBehaviour
 
         ResearchData.assignDataToDictionaries();
 
-        if (ResearchData.worldAge >= 1200f || Input.GetKeyDown(KeyCode.Escape))
+        if (ResearchData.worldAge >= 5f)
         {
             quit();
         }
