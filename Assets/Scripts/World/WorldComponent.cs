@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.MaterialProperty;
 using Assets.Scripts.HelpfulStructures;
 using Assets.Scripts.Sky;
 using UnityEngine.UI;
@@ -21,6 +20,8 @@ public class WorldComponent : MonoBehaviour
     public CubeRaycaster cubeRaycaster;
 
     public Text worldAgeText;
+
+    public PerformanceMeasures performanceMeasures;
 
     private int squareHeight = 200;
     private int squareDimension = 30;
@@ -128,10 +129,8 @@ public class WorldComponent : MonoBehaviour
     private void quit()
     {
         ResearchData.writeDataToFiles();
+        performanceMeasures.writePerformanceMeasuresToFiles();
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#endif
         Application.Quit();
     }
 }

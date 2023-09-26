@@ -222,7 +222,7 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("world age, species 1, species 2, species 3");
+                sw.WriteLine("world age;species 1;species 2;species 3");
 
                 foreach (KeyValuePair<float, int> pair in species1CurrentBranchCountInWorldAge)
                 {
@@ -234,7 +234,7 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("world age, current branch count, fall off branch count, overall branch count");
+                sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
                 foreach (KeyValuePair<float, int> pair in plant1CurrentBranchCountInWorldAge)
                 {
@@ -246,7 +246,7 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("world age, current branch count, fall off branch count, overall branch count");
+                sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
                 foreach (KeyValuePair<float, int> pair in plant2CurrentBranchCountInWorldAge)
                 {
@@ -258,7 +258,7 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("world age, current branch count, fall off branch count, overall branch count");
+                sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
                 foreach (KeyValuePair<float, int> pair in plant3CurrentBranchCountInWorldAge)
                 {
