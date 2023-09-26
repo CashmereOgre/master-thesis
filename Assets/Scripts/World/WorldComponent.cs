@@ -6,6 +6,7 @@ using UnityEngine;
 using static UnityEditor.MaterialProperty;
 using Assets.Scripts.HelpfulStructures;
 using Assets.Scripts.Sky;
+using UnityEngine.UI;
 
 public class WorldComponent : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class WorldComponent : MonoBehaviour
     public SquareRaycaster squareRaycaster;
 
     public CubeRaycaster cubeRaycaster;
+
+    public Text worldAgeText;
 
     private int squareHeight = 200;
     private int squareDimension = 30;
@@ -92,6 +95,7 @@ public class WorldComponent : MonoBehaviour
     {
         ResearchData.worldAge += 0.01f;
         Debug.Log(ResearchData.worldAge.ToString());
+        worldAgeText.text = ResearchData.worldAge.ToString();
 
         //RaycastCollisionsLookupTable.objectRayCountDictionary = squareRaycaster.castRaysSquare();
         RaycastCollisionsLookupTable.objectRayCountDictionary = cubeRaycaster.castRaysCube();
