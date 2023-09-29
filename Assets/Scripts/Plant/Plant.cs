@@ -105,7 +105,7 @@ public class Plant: MonoBehaviour
             plantSpecies.apicalControl = plantSpecies.apicalControlMature;
         }
 
-        if (vigor <= plantSpecies.vigorMin)
+        if (vigor <= plantSpecies.vigorMin && trunk.childBranches.Count == 0)
         {
             destroyPlant();
             return;

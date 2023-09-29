@@ -120,17 +120,15 @@ public class WorldComponent : MonoBehaviour
 
         ResearchData.assignDataToDictionaries();
 
-        if (ResearchData.worldAge >= 5f)
+        if (ResearchData.worldAge >= 600f)
         {
-            quit();
+            Application.Quit();
         }
     }
 
-    private void quit()
+    private void OnApplicationQuit()
     {
         ResearchData.writeDataToFiles();
         performanceMeasures.writePerformanceMeasuresToFiles();
-
-        Application.Quit();
     }
 }
