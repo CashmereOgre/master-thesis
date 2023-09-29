@@ -51,7 +51,7 @@ public class WorldComponent : MonoBehaviour
         plantsList = new List<Plant>();
 
         PlantSpecies plant1Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0));
-        Vector3 plant1Position = new Vector3(0f, 0f, 0f);
+        Vector3 plant1Position = new Vector3(10f, 0f, -1f);
         Plant plant1 = new Plant(plant1Specimen, plant1Position);
         plant1.plantGameObject = plant1.instantiatePlant(plantPrefab);
         plant1.id = 0;
@@ -59,7 +59,7 @@ public class WorldComponent : MonoBehaviour
         plant1.plantGameObject.transform.position = plant1Position;
 
         PlantSpecies plant2Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(1));
-        Vector3 plant2Position = new Vector3(7.5f, 0f, 7.5f);
+        Vector3 plant2Position = new Vector3(-7.5f, 0f, 7.5f);
         Plant plant2 = new Plant(plant2Specimen, plant2Position);
         plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
         plant2.id = 1;
@@ -67,7 +67,7 @@ public class WorldComponent : MonoBehaviour
         plant2.plantGameObject.transform.position = plant2Position;
 
         PlantSpecies plant3Specimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(2));
-        Vector3 plant3Position = new Vector3(-7.5f, 0f, -7.5f);
+        Vector3 plant3Position = new Vector3(-3f, 0f, -9f);
         Plant plant3 = new Plant(plant3Specimen, plant3Position);
         plant3.plantGameObject = plant3.instantiatePlant(plantPrefab);
         plant3.id = 2;
