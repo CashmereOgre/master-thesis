@@ -22,6 +22,7 @@ namespace Assets.Scripts.HelpfulStructures
 
         private Dictionary <float, float> currentFPSPerTotalTime = new Dictionary<float, float>();
         private Dictionary <float, long> currentRamUsagePerTotalTime = new Dictionary<float, long>();
+        private Dictionary<float, float> currentWorldAgePerTotalTime = new Dictionary<float, float>();
 
         private void Update()
         {
@@ -38,6 +39,7 @@ namespace Assets.Scripts.HelpfulStructures
 
             currentFPSPerTotalTime.Add(totalTime, currentFPS);
             currentRamUsagePerTotalTime.Add(totalTime, currentRamUsage);
+            currentWorldAgePerTotalTime.Add(totalTime, ResearchData.worldAge);
         }
 
         public void writePerformanceMeasuresToFiles()
@@ -59,11 +61,11 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("time;FPS");
+                sw.WriteLine("time;world age;FPS");
 
                 foreach (KeyValuePair<float, float> pair in currentFPSPerTotalTime)
                 {
-                    sw.WriteLine($"{pair.Key};{pair.Value}");
+                    sw.WriteLine($"{pair.Key};{currentWorldAgePerTotalTime[pair.Key]};{pair.Value}");
                 }
             }
 
@@ -71,11 +73,11 @@ namespace Assets.Scripts.HelpfulStructures
 
             using (StreamWriter sw = new StreamWriter(fileName))
             {
-                sw.WriteLine("time;RAM usage");
+                sw.WriteLine("time;world age;RAM usage");
 
                 foreach (KeyValuePair<float, long> pair in currentRamUsagePerTotalTime)
                 {
-                    sw.WriteLine($"{pair.Key};{pair.Value}");
+                    sw.WriteLine($"{pair.Key};{currentWorldAgePerTotalTime[pair.Key]};{pair.Value}");
                 }
             }
         }
