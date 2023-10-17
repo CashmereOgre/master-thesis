@@ -231,10 +231,8 @@ namespace Assets.Scripts.HelpfulStructures
             }
 
             plant1CurrentBranchCount--;
-            plant1FallOffBranchCount--;
             plant1OverallBranchCount--;
             plant2CurrentBranchCount--;
-            plant2FallOffBranchCount--;
             plant2OverallBranchCount--;
         }
 
