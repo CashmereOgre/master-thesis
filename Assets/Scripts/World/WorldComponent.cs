@@ -131,7 +131,6 @@ public class WorldComponent : MonoBehaviour
     private void FixedUpdate()
     {
         ResearchData.resetBranchCounts();
-        ResearchData.calculateBranchesCountForExperiment2();
         ResearchData.worldAge += 0.01f;
         worldAgeText.text = ResearchData.worldAge.ToString();
 
@@ -161,6 +160,7 @@ public class WorldComponent : MonoBehaviour
         plant2RightSideBranchesCount = plantsList[1].numberOfRightSideBranches;
 
         //ResearchData.assignDataToExperiment1Dictionaries();
+        ResearchData.calculateBranchesCountForExperiment2();
         ResearchData.assignDataToExperiment2Dictionaries(plant1LeftSideBranchesCount, plant1RightSideBranchesCount, plant2LeftSideBranchesCount, plant2RightSideBranchesCount);
 
         if (ResearchData.worldAge >= 1000f)

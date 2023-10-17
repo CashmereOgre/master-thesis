@@ -200,7 +200,11 @@ namespace Assets.Scripts.HelpfulStructures
         {
             foreach (KeyValuePair<string, Node> keyValue in NodesLookupTable.nodesDictionary)
             {
-                int plantId = int.Parse(keyValue.Key.Split('.').First());
+                string[] plantName = keyValue.Key.Split('.');
+                int plantId = int.Parse(plantName.First());
+
+                if (plantName.Last() == "0")
+                    continue;
 
                 if (plantId == 0)
                 {
@@ -229,11 +233,6 @@ namespace Assets.Scripts.HelpfulStructures
                     plant2OverallBranchCount++;
                 }
             }
-
-            plant1CurrentBranchCount--;
-            plant1OverallBranchCount--;
-            plant2CurrentBranchCount--;
-            plant2OverallBranchCount--;
         }
 
         public static void assignDataToExperiment1Dictionaries()
