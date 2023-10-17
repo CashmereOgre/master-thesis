@@ -52,6 +52,11 @@ namespace Assets.Scripts.HelpfulStructures
         private static Dictionary<float, int> plant3FallOffBranchCountInWorldAge = new Dictionary<float, int>();
         private static Dictionary<float, int> plant3OverallBranchCountInWorldAge = new Dictionary<float, int>();
 
+        private static Dictionary<float, int> plant1LeftSideBranchesCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<float, int> plant1RightSideBranchesCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<float, int> plant2LeftSideBranchesCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<float, int> plant2RightSideBranchesCountInWorldAge = new Dictionary<float, int>();
+
         public static void increasePlantCountForSpecies(int id)
         {
             if (id == 0)
@@ -180,7 +185,60 @@ namespace Assets.Scripts.HelpfulStructures
             }
         }
 
-        public static void assignDataToDictionaries()
+        public static void resetBranchCounts()
+        {
+            plant1CurrentBranchCount = 0;
+            plant1FallOffBranchCount = 0;
+            plant1OverallBranchCount = 0;
+
+            plant2CurrentBranchCount = 0;
+            plant2FallOffBranchCount = 0;
+            plant2OverallBranchCount = 0;
+        }
+
+        public static void calculateBranchesCountForExperiment2()
+        {
+            foreach (KeyValuePair<string, Node> keyValue in NodesLookupTable.nodesDictionary)
+            {
+                int plantId = int.Parse(keyValue.Key.Split('.').First());
+
+                if (plantId == 0)
+                {
+                    if (keyValue.Value != null)
+                    {
+                        plant1CurrentBranchCount++;
+                    }
+                    else
+                    {
+                        plant1FallOffBranchCount++;
+                    }
+
+                    plant1OverallBranchCount++;
+                }
+                else if (plantId == 2)
+                {
+                    if (keyValue.Value != null)
+                    {
+                        plant2CurrentBranchCount++;
+                    }
+                    else
+                    {
+                        plant2FallOffBranchCount++;
+                    }
+
+                    plant2OverallBranchCount++;
+                }
+            }
+
+            plant1CurrentBranchCount--;
+            plant1FallOffBranchCount--;
+            plant1OverallBranchCount--;
+            plant2CurrentBranchCount--;
+            plant2FallOffBranchCount--;
+            plant2OverallBranchCount--;
+        }
+
+        public static void assignDataToExperiment1Dictionaries()
         {
             species1PlantCountInWorldAge.Add(worldAge, species1PlantCount);
             species2PlantCountInWorldAge.Add(worldAge, species2PlantCount);
@@ -203,7 +261,23 @@ namespace Assets.Scripts.HelpfulStructures
             plant3OverallBranchCountInWorldAge.Add(worldAge, plant3OverallBranchCount);
         }
 
-        public static void writeDataToFiles()
+        public static void assignDataToExperiment2Dictionaries(int plant1LeftSideBranchCount, int plant1RightSideBranchCount, int plant2LeftSideBranchCount, int plant2RightSideBranchCount)
+        {
+            plant1LeftSideBranchesCountInWorldAge.Add(worldAge, plant1LeftSideBranchCount);
+            plant1RightSideBranchesCountInWorldAge.Add(worldAge, plant1RightSideBranchCount);
+            plant2LeftSideBranchesCountInWorldAge.Add(worldAge, plant2LeftSideBranchCount);
+            plant2RightSideBranchesCountInWorldAge.Add(worldAge, plant2RightSideBranchCount);
+
+            plant1CurrentBranchCountInWorldAge.Add(worldAge, plant1CurrentBranchCount);
+            plant1FallOffBranchCountInWorldAge.Add(worldAge, plant1FallOffBranchCount);
+            plant1OverallBranchCountInWorldAge.Add(worldAge, plant1OverallBranchCount);
+
+            plant2CurrentBranchCountInWorldAge.Add(worldAge, plant2CurrentBranchCount);
+            plant2FallOffBranchCountInWorldAge.Add(worldAge, plant2FallOffBranchCount);
+            plant2OverallBranchCountInWorldAge.Add(worldAge, plant2OverallBranchCount);
+        }
+
+        public static void writeExperiment1DataToFiles()
         {
             string dateTimeNow = DateTime.Now.ToString("dd.MM.yy hh-mm-ss");
             string fileName = $"species-plant-count-{dateTimeNow}.csv";
@@ -263,6 +337,34 @@ namespace Assets.Scripts.HelpfulStructures
                 foreach (KeyValuePair<float, int> pair in plant3CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant3FallOffBranchCountInWorldAge[pair.Key]};{plant3OverallBranchCountInWorldAge[pair.Key]}");
+                }
+            }
+        }
+
+        public static void writeExperiment2DataToFiles()
+        {
+            string dateTimeNow = DateTime.Now.ToString("dd.MM.yy hh-mm-ss");
+            string fileName = $"plant-1-branch-count-{dateTimeNow}.csv";
+
+            using (StreamWriter sw = new StreamWriter(fileName))
+            {
+                sw.WriteLine("world age;current branch count;fall off branch count;overall branch count;left side branches count;right side branches count");
+
+                foreach (KeyValuePair<float, int> pair in plant1CurrentBranchCountInWorldAge)
+                {
+                    sw.WriteLine($"{pair.Key};{pair.Value};{plant1FallOffBranchCountInWorldAge[pair.Key]};{plant1OverallBranchCountInWorldAge[pair.Key]};{plant1LeftSideBranchesCountInWorldAge[pair.Key]};{plant1RightSideBranchesCountInWorldAge[pair.Key]}");
+                }
+            }
+
+            fileName = $"plant-2-branch-count-{dateTimeNow}.csv";
+
+            using (StreamWriter sw = new StreamWriter(fileName))
+            {
+                sw.WriteLine("world age;current branch count;fall off branch count;overall branch count;left side branches count;right side branches count");
+
+                foreach (KeyValuePair<float, int> pair in plant2CurrentBranchCountInWorldAge)
+                {
+                    sw.WriteLine($"{pair.Key};{pair.Value};{plant2FallOffBranchCountInWorldAge[pair.Key]};{plant2OverallBranchCountInWorldAge[pair.Key]};{plant2LeftSideBranchesCountInWorldAge[pair.Key]};{plant2RightSideBranchesCountInWorldAge[pair.Key]}");
                 }
             }
         }

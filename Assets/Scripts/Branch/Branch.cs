@@ -25,6 +25,15 @@ public class Branch: MonoBehaviour
     {
         capsuleCollider = updateCapsuleColliderDimensions();
 
+        if (terminalNode.nodeGameObject.transform.position.x > terminalNode.plant.position.x)
+        {
+            terminalNode.plant.numberOfRightSideBranches++;
+        }
+        else
+        {
+            terminalNode.plant.numberOfLeftSideBranches++;
+        }
+
         if (terminalNode.physiologicalAge < prototype.maturityAge)
         {
             float physiologicalAge = getPhysiologicalAge(ageStep);
@@ -88,9 +97,9 @@ public class Branch: MonoBehaviour
         childBranch.capsuleCollider = childBranch.setCapsuleCollider();
 
         int plantId = terminalNode.plant.id;
-        ResearchData.increaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
-        ResearchData.increaseCurrentBranchCountForFirstTrees(plantId);
-        ResearchData.increaseOverallBranchCountForFirstTrees(plantId);
+        //ResearchData.increaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
+        //ResearchData.increaseCurrentBranchCountForFirstTrees(plantId);
+        //ResearchData.increaseOverallBranchCountForFirstTrees(plantId);
 
         return childBranch;
     }
@@ -267,9 +276,9 @@ public class Branch: MonoBehaviour
     private void destroyChildBranch(Branch childBranch)
     {
         int plantId = terminalNode.plant.id;
-        ResearchData.decreaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
-        ResearchData.decreaseCurrentBranchCountForFirstTrees(plantId);
-        ResearchData.increaseFallOffBranchCountForFirstTrees(plantId);
+        //ResearchData.decreaseBranchCountForSpecies(terminalNode.plant.plantSpecies.id);
+        //ResearchData.decreaseCurrentBranchCountForFirstTrees(plantId);
+        //ResearchData.increaseFallOffBranchCountForFirstTrees(plantId);
 
         childBranches.Remove(childBranch);
         Destroy(childBranch.terminalNode.gameObject);

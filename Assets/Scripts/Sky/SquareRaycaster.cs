@@ -32,17 +32,6 @@ public class SquareRaycaster : MonoBehaviour
 
         foreach (Vector3 rayPoint in raysSquareStartingPoints)
         {
-            //List<Vector3> directions = getDirections(rayPoint);
-
-            //foreach (Vector3 direction in directions)
-            //{
-            //    Ray ray = new Ray(rayPoint, direction);
-            //    RaycastHit hit;
-
-            //    Physics.Raycast(ray, out hit, rayPoint.y * Mathf.Sqrt(2));
-
-            //    addRayToDictionary(hit, objectRayCountsDictionary);
-            //}
             Vector3 direction = (new Vector3(rayPoint.x, 0, rayPoint.z) - rayPoint).normalized;
             Ray ray = new Ray(rayPoint, direction);
             RaycastHit hit;

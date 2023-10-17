@@ -15,6 +15,8 @@ namespace Assets.Scripts.Sky
         private List<Vector3> raysBackFrontStartingPoints = new List<Vector3>();
 
         private float squareDimension = 0;
+        private float dimensionSide = 0;
+        private float dimensionFront = 0;
 
         public void setRaysCube(int squareDimension, int density, float cubeHeight)
         {
@@ -62,7 +64,63 @@ namespace Assets.Scripts.Sky
             }
         }
 
-        public Dictionary<string, int> castRaysCube()
+        public void setRays(int dimensionSide, int dimensionFront, float distanceBetweenPoints, float cubeHeight)
+        {
+            this.dimensionSide = dimensionSide;
+            this.dimensionFront = dimensionFront;
+            int heightDensity = Mathf.FloorToInt(cubeHeight / distanceBetweenPoints + 1);
+            int sideDensity = Mathf.FloorToInt(this.dimensionSide / distanceBetweenPoints + 1);
+            int frontDensity = Mathf.FloorToInt(this.dimensionFront / distanceBetweenPoints + 1);
+            float startingCornerX = -(this.dimensionFront / 2);
+            float startingCornerZ = -(this.dimensionSide / 2);
+
+            for (int i = 0; i <= sideDensity; i++)
+            {
+                for (int j = 0; j <= frontDensity; j++)
+                {
+                    Vector3 rayStartingPoint = new Vector3(startingCornerX + j * distanceBetweenPoints, cubeHeight, startingCornerZ + i * distanceBetweenPoints);
+                    raysTopStartingPoints.Add(rayStartingPoint);
+                }
+            }
+
+            for (int i = 0; i <= heightDensity; i++)
+            {
+                for (int j = 0; j <= frontDensity; j++)
+                {
+                    Vector3 rayStartingPoint = new Vector3(startingCornerX, 0 + i * distanceBetweenPoints, startingCornerZ + j * distanceBetweenPoints);
+                    raysBackFrontStartingPoints.Add(rayStartingPoint);
+                }
+            }
+
+            for (int i = 0; i <= heightDensity; i++)
+            {
+                for (int j = 0; j <= frontDensity; j++)
+                {
+                    Vector3 rayStartingPoint = new Vector3(-startingCornerX, 0 + i * distanceBetweenPoints, startingCornerZ + j * distanceBetweenPoints);
+                    raysBackFrontStartingPoints.Add(rayStartingPoint);
+                }
+            }
+
+            for (int i = 0; i <= heightDensity; i++)
+            {
+                for (int j = 0; j <= sideDensity; j++)
+                {
+                    Vector3 rayStartingPoint = new Vector3(startingCornerX + i * distanceBetweenPoints, 0 + j * distanceBetweenPoints, startingCornerZ);
+                    raysLeftRightStartingPoints.Add(rayStartingPoint);
+                }
+            }
+
+            for (int i = 0; i <= heightDensity; i++)
+            {
+                for (int j = 0; j <= sideDensity; j++)
+                {
+                    Vector3 rayStartingPoint = new Vector3(startingCornerX + i * distanceBetweenPoints, 0 + j * distanceBetweenPoints, -startingCornerZ);
+                    raysLeftRightStartingPoints.Add(rayStartingPoint);
+                }
+            }
+        }
+
+        public Dictionary<string, int> castRays()
         {
             Dictionary<string, int> objectRayCountsDictionary = new Dictionary<string, int>();
 
@@ -85,7 +143,7 @@ namespace Assets.Scripts.Sky
                 Ray ray = new Ray(rayStartingPoint, direction);
                 RaycastHit hit;
 
-                Physics.Raycast(ray, out hit, squareDimension);
+                Physics.Raycast(ray, out hit, dimensionSide);
 
                 addRayToDictionary(hit, objectRayCountsDictionary);
             }
@@ -97,7 +155,7 @@ namespace Assets.Scripts.Sky
                 Ray ray = new Ray(rayStartingPoint, direction);
                 RaycastHit hit;
 
-                Physics.Raycast(ray, out hit, squareDimension);
+                Physics.Raycast(ray, out hit, dimensionFront);
 
                 addRayToDictionary(hit, objectRayCountsDictionary);
             }

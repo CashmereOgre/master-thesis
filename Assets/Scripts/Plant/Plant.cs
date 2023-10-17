@@ -12,8 +12,13 @@ public class Plant: MonoBehaviour
     public float totalLightExposure { get; set; }
     public float age { get; set; }
     public float effectiveFloweringAge { get; set; }
+    public bool isSeeding { get; set; }
 
     public GameObject plantGameObject;
+
+    public int numberOfLeftSideBranches = 0;
+    public int numberOfRightSideBranches = 0;
+
 
     public Plant(PlantSpecies _plantSpecimen, Vector3 _position)
     {
@@ -23,6 +28,7 @@ public class Plant: MonoBehaviour
         totalLightExposure = 0;
         age = 0;
         effectiveFloweringAge = _plantSpecimen.floweringAge;
+        isSeeding = true;
     }
 
     public GameObject instantiatePlant(GameObject plantPrefab)
@@ -85,13 +91,16 @@ public class Plant: MonoBehaviour
         terminalNode.branchLineRenderer = terminalNode.setBranchLineRenderer();
 
         ResearchData.increasePlantCountForSpecies(plantSpecies.id);
-        ResearchData.increaseBranchCountForSpecies(plantSpecies.id);
-        ResearchData.increaseCurrentBranchCountForFirstTrees(id);
-        ResearchData.increaseOverallBranchCountForFirstTrees(id);
+        //ResearchData.increaseBranchCountForSpecies(plantSpecies.id);
+        //ResearchData.increaseCurrentBranchCountForFirstTrees(id);
+        //ResearchData.increaseOverallBranchCountForFirstTrees(id);
     }
 
     public void growPlant()
     {
+        numberOfLeftSideBranches = 0;
+        numberOfRightSideBranches = 0;
+
         totalLightExposure = trunk.calculateLightExposure();
         age += 0.01f;
 
@@ -147,9 +156,9 @@ public class Plant: MonoBehaviour
     private void destroyPlant()
     {
         ResearchData.decreasePlantCountForSpecies(plantSpecies.id);
-        ResearchData.decreaseBranchCountForSpecies(plantSpecies.id);
-        ResearchData.decreaseCurrentBranchCountForFirstTrees(id);
-        ResearchData.increaseFallOffBranchCountForFirstTrees(id);
+        //ResearchData.decreaseBranchCountForSpecies(plantSpecies.id);
+        //ResearchData.decreaseCurrentBranchCountForFirstTrees(id);
+        //ResearchData.increaseFallOffBranchCountForFirstTrees(id);
         Destroy(trunk.terminalNode.gameObject);
         Destroy(trunk.rootNode.gameObject);
         Destroy(plantGameObject);
