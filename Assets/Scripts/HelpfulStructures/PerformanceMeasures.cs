@@ -22,7 +22,7 @@ namespace Assets.Scripts.HelpfulStructures
 
         private Dictionary <float, float> currentFPSPerTotalTime = new Dictionary<float, float>();
         private Dictionary <float, long> currentRamUsagePerTotalTime = new Dictionary<float, long>();
-        private Dictionary<float, float> currentWorldAgePerTotalTime = new Dictionary<float, float>();
+        private Dictionary<float, double> currentWorldAgePerTotalTime = new Dictionary<float, double>();
 
         private void Update()
         {

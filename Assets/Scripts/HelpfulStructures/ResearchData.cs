@@ -10,7 +10,7 @@ namespace Assets.Scripts.HelpfulStructures
 {
     public static class ResearchData
     {
-        public static float worldAge = 0;
+        public static double worldAge = 0;
 
         private static int species1PlantCount = 0;
         private static int species2PlantCount = 0;
@@ -32,30 +32,30 @@ namespace Assets.Scripts.HelpfulStructures
         private static int plant3FallOffBranchCount = 0;
         private static int plant3OverallBranchCount = 0;
 
-        private static Dictionary<float, int> species1PlantCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> species2PlantCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> species3PlantCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> species1PlantCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> species2PlantCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> species3PlantCountInWorldAge = new Dictionary<double, int>();
 
-        private static Dictionary<float, int> species1CurrentBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> species2CurrentBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> species3CurrentBranchCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> species1CurrentBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> species2CurrentBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> species3CurrentBranchCountInWorldAge = new Dictionary<double, int>();
 
-        private static Dictionary<float, int> plant1CurrentBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant1FallOffBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant1OverallBranchCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> plant1CurrentBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant1FallOffBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant1OverallBranchCountInWorldAge = new Dictionary<double, int>();
 
-        private static Dictionary<float, int> plant2CurrentBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant2FallOffBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant2OverallBranchCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> plant2CurrentBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant2FallOffBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant2OverallBranchCountInWorldAge = new Dictionary<double, int>();
 
-        private static Dictionary<float, int> plant3CurrentBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant3FallOffBranchCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant3OverallBranchCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> plant3CurrentBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant3FallOffBranchCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant3OverallBranchCountInWorldAge = new Dictionary<double, int>();
 
-        private static Dictionary<float, int> plant1LeftSideBranchesCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant1RightSideBranchesCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant2LeftSideBranchesCountInWorldAge = new Dictionary<float, int>();
-        private static Dictionary<float, int> plant2RightSideBranchesCountInWorldAge = new Dictionary<float, int>();
+        private static Dictionary<double, int> plant1LeftSideBranchesCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant1RightSideBranchesCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant2LeftSideBranchesCountInWorldAge = new Dictionary<double, int>();
+        private static Dictionary<double, int> plant2RightSideBranchesCountInWorldAge = new Dictionary<double, int>();
 
         public static void increasePlantCountForSpecies(int id)
         {
@@ -219,7 +219,7 @@ namespace Assets.Scripts.HelpfulStructures
 
                     plant1OverallBranchCount++;
                 }
-                else if (plantId == 2)
+                else if (plantId == 1)
                 {
                     if (keyValue.Value != null)
                     {
@@ -283,7 +283,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;species 1;species 2;species 3");
 
-                foreach (KeyValuePair<float, int> pair in species1PlantCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in species1PlantCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{species2PlantCountInWorldAge[pair.Key]};{species3PlantCountInWorldAge[pair.Key]}");
                 }
@@ -295,7 +295,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;species 1;species 2;species 3");
 
-                foreach (KeyValuePair<float, int> pair in species1CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in species1CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{species2CurrentBranchCountInWorldAge[pair.Key]};{species3CurrentBranchCountInWorldAge[pair.Key]}");
                 }
@@ -307,7 +307,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
-                foreach (KeyValuePair<float, int> pair in plant1CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in plant1CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant1FallOffBranchCountInWorldAge[pair.Key]};{plant1OverallBranchCountInWorldAge[pair.Key]}");
                 }
@@ -319,7 +319,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
-                foreach (KeyValuePair<float, int> pair in plant2CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in plant2CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant2FallOffBranchCountInWorldAge[pair.Key]};{plant2OverallBranchCountInWorldAge[pair.Key]}");
                 }
@@ -331,7 +331,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;current branch count;fall off branch count;overall branch count");
 
-                foreach (KeyValuePair<float, int> pair in plant3CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in plant3CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant3FallOffBranchCountInWorldAge[pair.Key]};{plant3OverallBranchCountInWorldAge[pair.Key]}");
                 }
@@ -347,7 +347,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;current branch count;fall off branch count;overall branch count;left side branches count;right side branches count");
 
-                foreach (KeyValuePair<float, int> pair in plant1CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in plant1CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant1FallOffBranchCountInWorldAge[pair.Key]};{plant1OverallBranchCountInWorldAge[pair.Key]};{plant1LeftSideBranchesCountInWorldAge[pair.Key]};{plant1RightSideBranchesCountInWorldAge[pair.Key]}");
                 }
@@ -359,7 +359,7 @@ namespace Assets.Scripts.HelpfulStructures
             {
                 sw.WriteLine("world age;current branch count;fall off branch count;overall branch count;left side branches count;right side branches count");
 
-                foreach (KeyValuePair<float, int> pair in plant2CurrentBranchCountInWorldAge)
+                foreach (KeyValuePair<double, int> pair in plant2CurrentBranchCountInWorldAge)
                 {
                     sw.WriteLine($"{pair.Key};{pair.Value};{plant2FallOffBranchCountInWorldAge[pair.Key]};{plant2OverallBranchCountInWorldAge[pair.Key]};{plant2LeftSideBranchesCountInWorldAge[pair.Key]};{plant2RightSideBranchesCountInWorldAge[pair.Key]}");
                 }

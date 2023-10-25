@@ -95,7 +95,7 @@ public class WorldComponent : MonoBehaviour
         plantsList = new List<Plant>();
 
         PlantSpecies plantSpecimen = new PlantSpecies(PlantSpeciesLookupTable.plantSpeciesDictionary.GetValueOrDefault(0));
-        Vector3 plant1Position = new Vector3(-3f, 0f, 0f);
+        Vector3 plant1Position = new Vector3(-1f, 0f, 0f);
         Plant plant1 = new Plant(plantSpecimen, plant1Position);
         plant1.plantGameObject = plant1.instantiatePlant(plantPrefab);
         plant1.id = 0;
@@ -103,7 +103,7 @@ public class WorldComponent : MonoBehaviour
         plant1.plantGameObject.transform.position = plant1Position;
         plant1.isSeeding = false;
 
-        Vector3 plant2Position = new Vector3(3f, 0f, 0f);
+        Vector3 plant2Position = new Vector3(1f, 0f, 0f);
         Plant plant2 = new Plant(plantSpecimen, plant2Position);
         plant2.plantGameObject = plant2.instantiatePlant(plantPrefab);
         plant2.id = 1;
@@ -130,9 +130,12 @@ public class WorldComponent : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ResearchData.resetBranchCounts();
-        ResearchData.worldAge += 0.01f;
+        ResearchData.worldAge += 0.01;
         worldAgeText.text = ResearchData.worldAge.ToString();
+
+        ResearchData.resetBranchCounts();
+        ResearchData.calculateBranchesCountForExperiment2();
+        ResearchData.assignDataToExperiment2Dictionaries(plant1LeftSideBranchesCount, plant1RightSideBranchesCount, plant2LeftSideBranchesCount, plant2RightSideBranchesCount);
 
         //RaycastCollisionsLookupTable.objectRayCountDictionary = squareRaycaster.castRaysSquare();
         RaycastCollisionsLookupTable.objectRayCountDictionary = cubeRaycaster.castRays();
@@ -160,10 +163,8 @@ public class WorldComponent : MonoBehaviour
         plant2RightSideBranchesCount = plantsList[1].numberOfRightSideBranches;
 
         //ResearchData.assignDataToExperiment1Dictionaries();
-        ResearchData.calculateBranchesCountForExperiment2();
-        ResearchData.assignDataToExperiment2Dictionaries(plant1LeftSideBranchesCount, plant1RightSideBranchesCount, plant2LeftSideBranchesCount, plant2RightSideBranchesCount);
 
-        if (ResearchData.worldAge >= 1000f)
+        if (ResearchData.worldAge >= 955)
         {
             Application.Quit();
         }

@@ -7,7 +7,6 @@ public class PlantSpecies
     public int id { get; set; }
     public float maxAge { get; set; }
 	public float gp { get; set; }  
-    public float tropism { get; set; } 
     public float apicalControl { get; set; }
     public float apicalControlMature { get; set; }
     public float vigorMax { get; set; }
@@ -31,7 +30,6 @@ public class PlantSpecies
         id = plantSpecies.id;
         maxAge = plantSpecies.maxAge;
         gp = plantSpecies.gp;
-        tropism = plantSpecies.tropism;
         apicalControl = plantSpecies.apicalControl;
         apicalControlMature = plantSpecies.apicalControlMature;
         vigorMax = plantSpecies.vigorMax;
